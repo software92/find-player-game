@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import Header from './components/Header';
+import Main from './components/Main';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -19,7 +19,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Header />
+      <Main />
     </>
   );
 };
