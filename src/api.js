@@ -1,5 +1,6 @@
-const URL =
-  'https://transfermarket.p.rapidapi.com/competitions/get-table?id=GB1&seasonID=2022&domain=de';
+const BASE_URL = 'https://transfermarket.p.rapidapi.com';
+const URL = `${BASE_URL}/competitions/get-table?id=GB1&seasonID=2022&domain=de`;
+
 const options = {
   method: 'GET',
   headers: {
@@ -13,4 +14,14 @@ export const getClubs = () => {
     .then((response) => response.json())
     .then((response) => response.table)
     .catch((err) => console.log(err));
+};
+
+export const getSquad = (clubId) => {
+  return fetch(
+    `${BASE_URL}/clubs/get-squad?id=${clubId}&saison_id=2022&domain=de`,
+    options
+  )
+    .then((response) => response.json())
+    .then((response) => console.log(response.squad))
+    .catch((err) => console.error(err));
 };
