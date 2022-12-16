@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ClubModal from './ClubModal';
 
 const Container = styled.div`
+  position: relative;
   font-size: 15px;
   text-align: center;
   &:not(:last-child) {
@@ -15,6 +16,7 @@ const Container = styled.div`
 
 const Emblem = styled.img`
   width: 60%;
+  z-index: 0;
 `;
 
 const Club = ({ clubImage, clubName, id }) => {

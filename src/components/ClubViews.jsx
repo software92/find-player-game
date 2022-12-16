@@ -4,7 +4,8 @@ import { getClubs } from '../api';
 import Club from './Club';
 
 const ClubList = styled.div`
-  width: 15%;
+  min-width: 15%;
+  height: 300px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 5px;
