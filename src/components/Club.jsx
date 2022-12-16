@@ -4,7 +4,7 @@ import ClubModal from './ClubModal';
 
 const Container = styled.div`
   font-size: 15px;
-  margin: 0 auto;
+  text-align: center;
   &:not(:last-child) {
     margin-bottom: 1px;
   }
@@ -14,8 +14,7 @@ const Container = styled.div`
 `;
 
 const Emblem = styled.img`
-  width: 45px;
-  //   margin: 5px;
+  width: 60%;
 `;
 
 const Club = ({ clubImage, clubName, id }) => {
