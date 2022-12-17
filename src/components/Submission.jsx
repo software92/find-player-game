@@ -2,10 +2,9 @@ import { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 35%;
-  border: 1px solid red;
+  width: 50%;
   background-color: red;
-  border: 1px solid black;
+  border-radius: 15px;
 `;
 
 const Photo = styled.div`
@@ -15,7 +14,8 @@ const Photo = styled.div`
   width: 200px;
   height: 200px;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  border-radius: 20px;
 `;
 
 const AnswerBox = styled.div`
@@ -23,30 +23,64 @@ const AnswerBox = styled.div`
   text-align: center;
   margin: 0 auto;
   margin-top: 10px;
+  margin-bottom: 30px;
+  background-color: white;
 `;
 
 const Answer = styled.input`
   width: 70%;
   height: 35px;
-  border: none;
+  border: 1.3px solid #3b3b3b;
   text-align: center;
   font-size: 20px;
   outline: none;
   margin-bottom: 10px;
+  border-radius: 15px;
   &::placeholder {
     color: #979dac;
   }
 `;
 
-const HintBox = styled.div``;
+const HintContainer = styled.div`
+  margin-bottom: 20px;
+`;
+const WrongAnswer = styled.h3`
+  font-size: 30px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+const HintList = styled.ul``;
+const HintBox = styled.li`
+  width: 95%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  border: 1px solid white;
+  margin: 0 auto;
+`;
+const Hint = styled.div`
+  border: 1px solid white;
+  font-size: 20px;
+  // margin: auto;
+  text-align: center;
+`;
+const Img = styled.img`
+  width: 50%;
+`;
 
 const Submission = () => {
   const ref = useRef();
   const [value, setValue] = useState('');
+  const [hintArr, setHintArr] = useState([]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(value);
+    const newValue = value.trim();
+    if (newValue.length === 0) return;
+
+    setHintArr((prev) => [...prev, newValue]);
+    console.log(hintArr);
     setValue('');
   };
   const onChange = () => {
@@ -69,7 +103,23 @@ const Submission = () => {
           />
         </form>
       </AnswerBox>
-      <HintBox></HintBox>
+      <HintList>
+        {hintArr.map((hint, index) => (
+          <HintContainer key={index}>
+            <WrongAnswer>{hint}</WrongAnswer>
+            <HintBox>
+              <Hint>
+                <Img src='https://tmssl.akamaized.net/images/wappen/medium/11.png?lm=1489787850' />
+              </Hint>
+              <Hint>FW</Hint>
+              <Hint>25</Hint>
+              <Hint>2</Hint>
+              <Hint>Germany</Hint>
+            </HintBox>
+          </HintContainer>
+        ))}
+      </HintList>
+      <button onClick={() => setHintArr([])}>Restart</button>
     </Container>
   );
 };

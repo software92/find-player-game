@@ -4,15 +4,16 @@ const URL = `${BASE_URL}/competitions/get-table?id=GB1&seasonID=2022&domain=de`;
 const options = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': '07dd671c78msh58716bc59c7e46ep1845fdjsn832fe709251d',
+    'X-RapidAPI-Key': '0557557c9dmsh5cd9939f56d5fcbp12a2f4jsn4a89d20a0da3',
     'X-RapidAPI-Host': 'transfermarket.p.rapidapi.com',
   },
 };
 
+// api 요청 제한으로 5개 팀만 사용
 export const getClubs = () => {
   return fetch(URL, options)
     .then((response) => response.json())
-    .then((response) => response.table)
+    .then((response) => response.table.slice(0, 5))
     .catch((err) => console.log(err));
 };
 
