@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import Cover from './Cover';
 
 const Container = styled.div`
   width: 50%;
   background-color: red;
   border-radius: 15px;
+  position: relative;
 `;
 
 const Photo = styled.div`
@@ -62,7 +64,6 @@ const HintBox = styled.li`
 const Hint = styled.div`
   border: 1px solid white;
   font-size: 20px;
-  // margin: auto;
   text-align: center;
 `;
 const Img = styled.img`
@@ -73,6 +74,7 @@ const Submission = () => {
   const ref = useRef();
   const [value, setValue] = useState('');
   const [hintArr, setHintArr] = useState([]);
+  const [isStart, setIsStart] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -89,6 +91,7 @@ const Submission = () => {
 
   return (
     <Container>
+      {isStart ? null : <Cover setIsStart={setIsStart} />}
       <AnswerBox>
         <Photo />
         <form method='get' onSubmit={onSubmit}>
