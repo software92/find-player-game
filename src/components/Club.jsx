@@ -6,17 +6,15 @@ const Container = styled.div`
   position: relative;
   font-size: 15px;
   text-align: center;
-  &:not(:last-child) {
-    margin-bottom: 1px;
-  }
   &:hover {
     cursor: pointer;
   }
 `;
 
 const Emblem = styled.img`
-  width: 60%;
+  width: 70%;
   z-index: 0;
+  margin-top: 10px;
 `;
 
 const Club = ({ clubImage, clubName, id }) => {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Squad = styled.ul`
   position: absolute;
   top: 0;
-  right: -80px;
+  right: -70px;
   z-index: 1;
 `;
 const Player = styled.li``;
