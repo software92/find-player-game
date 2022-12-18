@@ -19,10 +19,10 @@ export const getClubs = () => {
 
 export const getSquad = (clubId) => {
   return fetch(
-    `${BASE_URL}/clubs/get-squad?id=${clubId}&saison_id=2022&domain=de`,
+    `${BASE_URL}/clubs/get-squad?id=${clubId}&saison_id=2022&domain=com`,
     options
   )
     .then((response) => response.json())
-    .then((response) => console.log(response.squad))
+    .then((response) => response.squad)
     .catch((err) => console.error(err));
 };

@@ -30,7 +30,7 @@ const Club = ({ clubImage, clubName, id }) => {
   return (
     <Container onMouseOver={() => showClub()} onMouseOut={() => outClub()}>
       <Emblem src={clubImage} />
-      {isShow ? <ClubModal /> : null}
+      {isShow ? <ClubModal id={id} /> : null}
     </Container>
   );
 };

@@ -1,3 +1,4 @@
+import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Main from './components/Main';
@@ -17,10 +18,10 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   return (
-    <>
+    <RecoilRoot>
       <GlobalStyle />
       <Main />
-    </>
+    </RecoilRoot>
   );
 };
 

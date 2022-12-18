@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getClubs } from '../api';
+import { getClubs, getSquad } from '../api';
+import { clubsState, squadsState } from '../atom';
+import { tempClubs, tempSquad1, tempSquad2 } from '../tempData';
 import Club from './Club';
 
 const ClubList = styled.div`
@@ -13,126 +16,49 @@ const ClubList = styled.div`
   border-radius: 15px;
 `;
 
-const tempClubs = [
-  {
-    id: '11',
-    group: null,
-    rank: 1,
-    oldRank: 1,
-    clubName: 'FC Arsenal',
-    clubImage:
-      'https://tmssl.akamaized.net/images/wappen/medium/11.png?lm=1489787850',
-    points: 37,
-    goals: 33,
-    goalsConceded: 11,
-    goalDifference: 22,
-    matches: 14,
-    wins: 12,
-    losses: 1,
-    draw: 1,
-    markID: '31',
-    markClass: 'meister',
-    markColor: '#afd179',
-    markDescription: 'Meister & UEFA-Champions-League',
-  },
-  {
-    id: '281',
-    group: null,
-    rank: 2,
-    oldRank: 2,
-    clubName: 'Manchester City',
-    clubImage:
-      'https://tmssl.akamaized.net/images/wappen/medium/281.png?lm=1467356331',
-    points: 32,
-    goals: 40,
-    goalsConceded: 14,
-    goalDifference: 26,
-    matches: 14,
-    wins: 10,
-    losses: 2,
-    draw: 2,
-    markID: '78',
-    markClass: 'gruen',
-    markColor: '#c3dc9a',
-    markDescription: 'UEFA Champions League',
-  },
-  {
-    id: '762',
-    group: null,
-    rank: 3,
-    oldRank: 3,
-    clubName: 'Newcastle Utd.',
-    clubImage:
-      'https://tmssl.akamaized.net/images/wappen/medium/762.png?lm=1472921161',
-    points: 30,
-    goals: 29,
-    goalsConceded: 11,
-    goalDifference: 18,
-    matches: 15,
-    wins: 8,
-    losses: 1,
-    draw: 6,
-    markID: '78',
-    markClass: 'gruen',
-    markColor: '#c3dc9a',
-    markDescription: 'UEFA Champions League',
-  },
-  {
-    id: '148',
-    group: null,
-    rank: 4,
-    oldRank: 4,
-    clubName: 'Tottenham',
-    clubImage:
-      'https://tmssl.akamaized.net/images/wappen/medium/148.png?lm=1544345801',
-    points: 29,
-    goals: 31,
-    goalsConceded: 21,
-    goalDifference: 10,
-    matches: 15,
-    wins: 9,
-    losses: 4,
-    draw: 2,
-    markID: '78',
-    markClass: 'gruen',
-    markColor: '#c3dc9a',
-    markDescription: 'UEFA Champions League',
-  },
-  {
-    id: '985',
-    group: null,
-    rank: 5,
-    oldRank: 5,
-    clubName: 'Manchester Utd.',
-    clubImage:
-      'https://tmssl.akamaized.net/images/wappen/medium/985.png?lm=1457975903',
-    points: 26,
-    goals: 20,
-    goalsConceded: 20,
-    goalDifference: 0,
-    matches: 14,
-    wins: 8,
-    losses: 4,
-    draw: 2,
-    markID: '4',
-    markClass: 'uefa',
-    markColor: '#bdd9ef',
-    markDescription: 'UEFA Europa League',
-  },
-];
-
 const ClubViews = () => {
-  const [clubs, setClubs] = useState([]);
+  const [clubs, setClubs] = useRecoilState(clubsState);
+  const [squads, setSquads] = useRecoilState(squadsState);
 
-  const loadClubs = async () => {
-    // const clubs = await getClubs();
-    setClubs(tempClubs);
-  };
+  const loadClubs = useCallback(async () => {
+    // const loadClubs = await getClubs();
+    // setClubs(loadClubs);
+    // api 호출 데이터 대신 temp data 사용
+    const newClubs = tempClubs.map((club) => {
+      const newObj = {
+        id: club.id,
+        rank: club.rank,
+        clubImage: club.clubImage,
+      };
+      return newObj;
+    });
+
+    setClubs(newClubs);
+  }, []);
+
+  const loadSquads = useCallback(() => {
+    // api 호출 데이터 대신 temp data 사용
+    if (clubs.length > 0) {
+      const squads = [
+        { id: 11, squad: tempSquad1 },
+        { id: 148, squad: tempSquad2 },
+      ];
+      setSquads(squads);
+    }
+  }, [clubs]);
 
   useEffect(() => {
     loadClubs();
-  }, []);
+  }, [loadClubs]);
 
+  useEffect(() => {
+    if (clubs.length > 0) {
+      loadSquads();
+    }
+  }, [clubs, loadSquads]);
+
+  console.log('clubs', clubs);
+  console.log('squads arr', squads);
   return (
     <ClubList>
       {clubs && clubs.length > 0
