@@ -10,6 +10,11 @@ export const squadsState = atom({
   default: [],
 });
 
+export const quizState = atom({
+  key: 'quiz',
+  default: {},
+});
+
 // selector
 export const totalSquadState = selector({
   key: 'totalPlayer',

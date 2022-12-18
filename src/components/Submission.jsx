@@ -1,23 +1,24 @@
 import { useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { quizState } from '../atom';
 import Cover from './Cover';
 
 const Container = styled.div`
-  width: 50%;
+  width: 40%;
+  min-height: 300px;
   background-color: red;
   border-radius: 15px;
   position: relative;
 `;
 
-const Photo = styled.div`
-  // 임시 이미지
-  background: center / 75% no-repeat
-    url('https://img.a.transfermarkt.technology/portrait/medium/74842-1663065102.jpg?lm=1');
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  margin-bottom: 20px;
+const Photo = styled.img`
+  width: 160px;
+  height: 180px;
   border-radius: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  ${(props) => (props.isCorrect ? null : 'filter: blur(13px)')};
 `;
 
 const AnswerBox = styled.div`
@@ -74,7 +75,10 @@ const Submission = () => {
   const ref = useRef();
   const [value, setValue] = useState('');
   const [hintArr, setHintArr] = useState([]);
-  const [isStart, setIsStart] = useState(false);
+  const [isQuizStart, setIsQuizStart] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const { id, name, imageUrl, age, positionId, nationalitiesImageUrl } =
+    useRecoilValue(quizState);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -89,11 +93,18 @@ const Submission = () => {
     setValue(ref.current.value);
   };
 
+  console.log(id, name, imageUrl, age, positionId, nationalitiesImageUrl);
+
   return (
     <Container>
-      {isStart ? null : <Cover setIsStart={setIsStart} />}
+      {isQuizStart ? null : <Cover setIsQuizStart={setIsQuizStart} />}
       <AnswerBox>
-        <Photo />
+        <Photo
+          draggable={false}
+          src={imageUrl || ''}
+          alt='player-image'
+          isCorrect={isCorrect}
+        />
         <form method='get' onSubmit={onSubmit}>
           <Answer
             ref={ref}
