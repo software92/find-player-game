@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { totalSquadState } from '../atom';
 
-const StartButtonBox = styled.div`
+const StartButton = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -10,40 +12,45 @@ const StartButtonBox = styled.div`
   position: absolute;
   background-color: red;
   border-radius: 15px;
-`;
-const StartButton = styled.span`
-  font-size: 50px;
-  font-weight: bold;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.isWait ? 'wait' : 'pointer')};
+  }
+  & > * {
+    font-size: 50px;
+    font-weight: bold;
   }
 `;
 
-const tempApiData = [
-  { id: 1, name: 'FC Seoul' },
-  { id: 2, name: 'FC Suwon' },
-];
-
 const Cover = ({ setIsStart }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const totalSquad = useRecoilValue(totalSquadState);
+
+  const selectPlayer = () => {
+    const totalSquadNumber = totalSquad.length;
+    const randomSquadNumber = Math.floor(Math.random() * totalSquadNumber);
+    const randomSquad = totalSquad[randomSquadNumber];
+    const randomPlayerNumber = Math.floor(Math.random() * randomSquad.length);
+
+    const randomPlayer = totalSquad[randomSquadNumber][randomPlayerNumber].name;
+    console.log(randomPlayer);
+  };
 
   const handleStartGame = () => {
+    if (isLoading) return;
     setIsLoading(true);
-    console.log(tempApiData);
 
     // api loading time (temp)
-    setInterval(() => {
-      setIsStart(true);
+    setTimeout(() => {
+      selectPlayer();
       setIsLoading(false);
-    }, 5000);
+      setIsStart(true);
+    }, 2000);
   };
 
   return (
-    <StartButtonBox>
-      <StartButton onClick={handleStartGame}>
-        {isLoading ? 'loading...' : 'Game Start'}
-      </StartButton>
-    </StartButtonBox>
+    <StartButton onClick={handleStartGame} isWait={isLoading}>
+      {isLoading ? <span>loading...</span> : <span>Game Start</span>}
+    </StartButton>
   );
 };
 
