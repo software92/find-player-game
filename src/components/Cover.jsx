@@ -44,7 +44,7 @@ const Cover = ({ setIsQuizStart }) => {
     setTimeout(() => {
       selectPlayer();
       setIsLoading(false);
-      // setIsQuizStart(true);
+      setIsQuizStart(true);
     }, 2000);
   };
 

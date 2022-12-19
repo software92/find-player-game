@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { quizState } from '../atom';
+import { quizState, totalPlayerState } from '../atom';
+import AutoSearch from './AutoSearch';
 import Cover from './Cover';
 import HintBox from './HintBox';
 
@@ -13,6 +14,15 @@ const Container = styled.div`
   margin-bottom: 100px;
 `;
 
+const AnswerBox = styled.div`
+  width: 85%;
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  background-color: white;
+  border-radius: 25px;
+  padding-bottom: 15px;
+`;
 const Photo = styled.img`
   width: 160px;
   height: 180px;
@@ -22,51 +32,58 @@ const Photo = styled.img`
   ${(props) => (props.isCorrect ? null : 'filter: blur(13px)')};
 `;
 
-const AnswerBox = styled.div`
-  width: 85%;
-  text-align: center;
-  margin: 0 auto;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  background-color: white;
-  border-radius: 25px;
-`;
-
 const Answer = styled.input`
   width: 70%;
   height: 35px;
   border: 1.3px solid #3b3b3b;
-  text-align: center;
-  font-size: 20px;
+  text-align: start;
+  font-size: 17px;
+  font-weight: bold;
   outline: none;
-  margin-bottom: 10px;
-  border-radius: 15px;
+  padding-left: 10px;
+  border-radius: 5px;
   &::placeholder {
     color: #979dac;
   }
 `;
-
 const Submission = () => {
-  const ref = useRef();
+  const answerRef = useRef();
   const [value, setValue] = useState('');
   const [hintArr, setHintArr] = useState([]);
   const [isQuizStart, setIsQuizStart] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const { id, name, imageUrl, age, positionId, nationalitiesImageUrl } =
-    useRecoilValue(quizState);
+  const quiz = useRecoilValue(quizState);
+  const totalPlayer = useRecoilValue(totalPlayerState);
+  const [searchingPlayers, setSearchingPlayers] = useState([]);
 
+  //   input에서 임의의 문자(검색되지 않은 선수)는 submit 하지 않음
+  // > 자동완성으로 검색된 선수만 submit 허용
   const onSubmit = (e) => {
     e.preventDefault();
     const newValue = value.trim();
     if (newValue.length === 0) return;
-
-    setHintArr((prev) => [...prev, newValue]);
-    console.log(hintArr);
-    setValue('');
+    if (searchingPlayers.length === 0) return;
   };
   const onChange = () => {
-    setValue(ref.current.value);
+    setValue(answerRef.current.value.toUpperCase());
   };
+
+  // totalPlayer에서 특정 선수 filtering
+  const findPlayers = () => {
+    const filterPlayer = totalPlayer.filter((player) => {
+      const name = player.name.toUpperCase();
+      if (name.includes(value.trim())) {
+        return player;
+      }
+    });
+    setSearchingPlayers(filterPlayer);
+  };
+
+  useEffect(() => {
+    if (value.length > 2) {
+      findPlayers(value);
+    }
+  }, [value]);
 
   return (
     <Container>
@@ -74,20 +91,28 @@ const Submission = () => {
       <AnswerBox>
         <Photo
           draggable={false}
-          src={imageUrl || ''}
+          src={quiz.image || ''}
           alt='player-image'
           isCorrect={isCorrect}
         />
         <form method='get' onSubmit={onSubmit}>
           <Answer
-            ref={ref}
+            ref={answerRef}
             type='text'
             name='player'
             id='player'
-            placeholder='Find a player!'
+            placeholder='Write a Full-name'
             onChange={onChange}
             value={value}
           />
+
+          {/* 선수 검색 시 자동완성 */}
+          {value.length > 2 ? (
+            <AutoSearch
+              searchingPlayers={searchingPlayers}
+              setValue={setValue}
+            />
+          ) : null}
         </form>
       </AnswerBox>
       <HintBox hintArr={hintArr} />
