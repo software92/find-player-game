@@ -5,7 +5,7 @@ import { squadsState } from '../atom';
 const Squad = styled.ul`
   position: absolute;
   top: 0;
-  right: -190px;
+  right: -210px;
   z-index: 1;
   width: 210px;
   border: 1px solid grey;
@@ -46,7 +46,7 @@ const Message = styled.span`
 `;
 
 // club의 suqad를 나타낼 modal
-const ClubModal = ({ id }) => {
+const ClubSquadModal = ({ id }) => {
   const squads = useRecoilValue(squadsState);
 
   const squad = squads.filter((squad) => squad.id === Number(id))[0];
@@ -69,4 +69,4 @@ const ClubModal = ({ id }) => {
   );
 };
 
-export default ClubModal;
+export default ClubSquadModal;

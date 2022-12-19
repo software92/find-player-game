@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import ClubModal from './ClubModal';
+import ClubSquadModal from './ClubSquadModal';
 
 const Container = styled.div`
   position: relative;
@@ -30,7 +30,7 @@ const Club = ({ clubImage, clubName, id }) => {
   return (
     <Container onMouseOver={() => showClub()} onMouseOut={() => outClub()}>
       <Emblem src={clubImage} />
-      {isShow ? <ClubModal id={id} /> : null}
+      {isShow ? <ClubSquadModal id={id} /> : null}
     </Container>
   );
 };
