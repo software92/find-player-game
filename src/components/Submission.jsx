@@ -3,13 +3,14 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { quizState } from '../atom';
 import Cover from './Cover';
+import HintBox from './HintBox';
 
 const Container = styled.div`
   width: 40%;
   min-height: 300px;
-  background-color: red;
   border-radius: 15px;
   position: relative;
+  margin-bottom: 100px;
 `;
 
 const Photo = styled.img`
@@ -28,6 +29,7 @@ const AnswerBox = styled.div`
   margin-top: 10px;
   margin-bottom: 30px;
   background-color: white;
+  border-radius: 25px;
 `;
 
 const Answer = styled.input`
@@ -42,33 +44,6 @@ const Answer = styled.input`
   &::placeholder {
     color: #979dac;
   }
-`;
-
-const HintContainer = styled.div`
-  margin-bottom: 20px;
-`;
-const WrongAnswer = styled.h3`
-  font-size: 30px;
-  margin: 0 auto;
-  text-align: center;
-  margin-bottom: 10px;
-`;
-const HintList = styled.ul``;
-const HintBox = styled.li`
-  width: 95%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
-  border: 1px solid white;
-  margin: 0 auto;
-`;
-const Hint = styled.div`
-  border: 1px solid white;
-  font-size: 20px;
-  text-align: center;
-`;
-const Img = styled.img`
-  width: 50%;
 `;
 
 const Submission = () => {
@@ -93,8 +68,6 @@ const Submission = () => {
     setValue(ref.current.value);
   };
 
-  console.log(id, name, imageUrl, age, positionId, nationalitiesImageUrl);
-
   return (
     <Container>
       {isQuizStart ? null : <Cover setIsQuizStart={setIsQuizStart} />}
@@ -117,23 +90,8 @@ const Submission = () => {
           />
         </form>
       </AnswerBox>
-      <HintList>
-        {hintArr.map((hint, index) => (
-          <HintContainer key={index}>
-            <WrongAnswer>{hint}</WrongAnswer>
-            <HintBox>
-              <Hint>
-                <Img src='https://tmssl.akamaized.net/images/wappen/medium/11.png?lm=1489787850' />
-              </Hint>
-              <Hint>FW</Hint>
-              <Hint>25</Hint>
-              <Hint>2</Hint>
-              <Hint>Germany</Hint>
-            </HintBox>
-          </HintContainer>
-        ))}
-      </HintList>
-      <button onClick={() => setHintArr([])}>Restart</button>
+      <HintBox hintArr={hintArr} />
+      <button onClick={() => setHintArr([])}>Hint Reset</button>
     </Container>
   );
 };
