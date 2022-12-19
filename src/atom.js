@@ -16,12 +16,19 @@ export const quizState = atom({
 });
 
 // selector
-export const totalSquadState = selector({
+export const totalPlayerState = selector({
   key: 'totalPlayer',
   get: ({ get }) => {
-    const squads = get(squadsState);
-    const totalSquads = squads.map((squad) => squad.squad);
+    const totalSquad = get(squadsState);
+    let totalPlayer = [];
 
-    return totalSquads;
+    // 선수 정보에 클럽 id를 포함시킴
+    for (const club of totalSquad) {
+      club.squad.forEach((player) => {
+        totalPlayer.push({ clubId: club.id, ...player });
+      });
+    }
+
+    return totalPlayer;
   },
 });

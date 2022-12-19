@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { quizState, totalSquadState } from '../atom';
+import { quizState, totalPlayerState } from '../atom';
 
 const StartButton = styled.div`
   width: 100%;
@@ -19,40 +19,21 @@ const StartButton = styled.div`
     font-size: 50px;
     font-weight: bold;
   }
+  z-index: 1;
 `;
 
 const Cover = ({ setIsQuizStart }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const totalSquad = useRecoilValue(totalSquadState);
+  const totalPlayer = useRecoilValue(totalPlayerState);
   const setQuiz = useSetRecoilState(quizState);
 
   const extractRandomNumber = (number) => Math.floor(Math.random() * number);
 
   const selectPlayer = () => {
-    const randomSquadNumber = extractRandomNumber(totalSquad.length);
-    const randomSquad = totalSquad[randomSquadNumber];
-    const randomPlayerNumber = extractRandomNumber(randomSquad.length);
-    const randomPlayer = totalSquad[randomSquadNumber][randomPlayerNumber];
-    const {
-      id,
-      name,
-      image,
-      age,
-      positions: {
-        first: { id: positionId },
-      },
-      nationalities: [born],
-    } = randomPlayer;
+    const randomPlayerNumber = extractRandomNumber(totalPlayer.length);
+    const randomPlayer = totalPlayer[randomPlayerNumber];
 
-    const playerObj = {
-      id,
-      name,
-      imageUrl: image,
-      age,
-      positionId,
-      nationalitiesImageUrl: born.image,
-    };
-    setQuiz(playerObj);
+    setQuiz(randomPlayer);
   };
 
   const handleStartGame = () => {
@@ -63,7 +44,7 @@ const Cover = ({ setIsQuizStart }) => {
     setTimeout(() => {
       selectPlayer();
       setIsLoading(false);
-      setIsQuizStart(true);
+      // setIsQuizStart(true);
     }, 2000);
   };
 
