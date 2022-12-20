@@ -63,6 +63,16 @@ const Submission = () => {
     const newValue = value.trim();
     if (newValue.length === 0) return;
     if (searchingPlayers.length === 0) return;
+
+    const isEqual = Object.is(quiz, searchingPlayers[0]);
+    console.log('eq', isEqual);
+
+    const hintObj = { q: quiz, answer: searchingPlayers[0] };
+    setHintArr((prev) => [hintObj, ...prev]);
+
+    if (isEqual) {
+      setIsCorrect(true);
+    }
   };
   const onChange = () => {
     setValue(answerRef.current.value.toUpperCase());
