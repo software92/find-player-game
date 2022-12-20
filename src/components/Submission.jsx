@@ -72,16 +72,14 @@ const Submission = () => {
   const findPlayers = () => {
     const filterPlayer = totalPlayer.filter((player) => {
       const name = player.name.toUpperCase();
-      if (name.includes(value.trim())) {
-        return player;
-      }
+      return name.includes(value.trim());
     });
     setSearchingPlayers(filterPlayer);
   };
 
   useEffect(() => {
     if (value.length > 2) {
-      findPlayers(value);
+      findPlayers();
     }
   }, [value]);
 
@@ -115,8 +113,7 @@ const Submission = () => {
           ) : null}
         </form>
       </AnswerBox>
-      <HintBox hintArr={hintArr} />
-      <button onClick={() => setHintArr([])}>Hint Reset</button>
+      {hintArr.length > 0 && <HintBox hintArr={hintArr} />}
     </Container>
   );
 };

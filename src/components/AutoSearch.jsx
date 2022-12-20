@@ -16,31 +16,39 @@ const PlayerBox = styled.li`
   font-weight: bold;
   color: rgba(59, 59, 59, 0.5);
   display: flex;
+  align-items: center;
+  gap: 10px;
   padding-left: 10px;
   &:hover {
     cursor: pointer;
   }
 `;
+const ClubEmblem = styled.img`
+  width: 25px;
+  height: 25px;
+`;
 const Name = styled.span`
-  // margin-left: 10px;
-  // margin: auto 0;
   margin: auto 0;
 `;
 
 const AutoSearch = ({ searchingPlayers, setValue }) => {
   const pickPlayer = (e) => {
-    const name = e.target.innerText;
+    const {
+      target: { innerText: name },
+    } = e;
+
     setValue(name);
   };
-  console.log('search', searchingPlayers);
 
   return (
     <AutoSearchBox>
       {searchingPlayers.map((player) => {
         const name = player.name.toUpperCase();
+        const imageUrl = player.nationalities[0].image;
 
         return (
           <PlayerBox key={player.id} onClick={pickPlayer}>
+            <ClubEmblem src={imageUrl} />
             <Name>{name}</Name>
           </PlayerBox>
         );
