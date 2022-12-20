@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getClubs, getSquad } from '../api';
 import { clubsState, squadsState } from '../atom';
@@ -26,14 +26,14 @@ const Loader = styled.span`
 const ClubViews = () => {
   const [isClubsLoading, setIsClubsLoading] = useState(true);
   const [clubs, setClubs] = useRecoilState(clubsState);
-  const [squads, setSquads] = useRecoilState(squadsState);
+  const setSquads = useSetRecoilState(squadsState);
 
   // api를 사용해 여러 개의 클럽 정보를 가져온다
   const loadClubs = useCallback(async () => {
     const loadClubs = await getClubs();
     setClubs(loadClubs);
     setIsClubsLoading(false);
-  }, []);
+  }, [setClubs]);
 
   // loadClubs에서 호출한 각 클럽의 정보를 사용해 클럽의 스쿼드를 가져오고 새로운 객체 생성
   // 객체를 하나의 배열로 재 생성한다(totalSquad)
@@ -50,7 +50,7 @@ const ClubViews = () => {
       totalSquad.push(tempClubObj);
     }
     setSquads(totalSquad);
-  }, [clubs]);
+  }, [clubs, setSquads]);
 
   // DOM이 처음 업데이트 된 후 최초 한 번만 실행
   useEffect(() => {
@@ -72,7 +72,6 @@ const ClubViews = () => {
         clubs.length > 0 &&
         clubs.map((club) => <Club key={club.id} {...club} />)
       )}
-      {/* To be load style 추가 */}
     </ClubList>
   );
 };

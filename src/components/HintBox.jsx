@@ -1,6 +1,4 @@
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { quizState, squadsState } from '../atom';
 
 const HintList = styled.ul`
   margin-bottom: 40px;
@@ -37,8 +35,6 @@ const Hint = styled.div`
 const ClubEmblem = styled.img`
   width: 50%;
 `;
-const Position = styled.div``;
-const Age = styled.div``;
 const Nation = styled.img`
   width: 60%;
   border: 0.5px solid black;
@@ -46,7 +42,7 @@ const Nation = styled.img`
 
 const HintBox = ({ hintArr }) => {
   const getPosition = (num) => {
-    return num === 1
+    return Number(num) === 1
       ? 'GK'
       : num < 6
       ? 'DF'
@@ -65,7 +61,6 @@ const HintBox = ({ hintArr }) => {
           age: age1,
           clubId: clubId1,
           clubImage: clubImage1,
-          image: profileImage1,
           name: name1,
           nationalities: [{ id: countryId1, image: countryImage1 }],
           positions: {
@@ -90,12 +85,12 @@ const HintBox = ({ hintArr }) => {
                 <ClubEmblem src={clubImage1} />
               </Hint>
               <Hint isEqual={isEqual(positionId1, positionId2)}>
-                <Position>{getPosition(positionId1)}</Position>
+                <span>{getPosition(positionId1)}</span>
               </Hint>
               <Hint isEqual={isEqual(age1, age2)}>
-                <Age>{`${age1} ${
+                <span>{`${age1} ${
                   age2 > age1 ? '☝' : age2 < age1 ? '👇' : ''
-                }`}</Age>
+                }`}</span>
               </Hint>
               <Hint isEqual={isEqual(countryId1, countryId2)}>
                 <Nation src={countryImage1} />
