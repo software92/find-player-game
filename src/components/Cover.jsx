@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { isSquadsLoadingState, quizState, totalPlayerState } from '../atom';
 
@@ -27,7 +27,7 @@ const Cover = ({ setIsQuizStart }) => {
   const [isLoading, setIsLoading] = useState(false);
   const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const totalPlayer = useRecoilValue(totalPlayerState);
-  const [quiz, setQuiz] = useRecoilState(quizState);
+  const setQuiz = useSetRecoilState(quizState);
 
   const extractRandomNumber = (number) => Math.floor(Math.random() * number);
 
