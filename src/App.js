@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet';
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
@@ -19,6 +20,9 @@ const GlobalStyle = createGlobalStyle`
 const App = () => {
   return (
     <RecoilRoot>
+      <Helmet>
+        <title>Find a football player game</title>
+      </Helmet>
       <GlobalStyle />
       <Main />
     </RecoilRoot>
