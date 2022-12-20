@@ -6,7 +6,7 @@ const Squad = styled.ul`
   position: absolute;
   top: 0;
   right: -210px;
-  z-index: 1;
+  z-index: 3;
   width: 210px;
   border: 1px solid grey;
   display: flex;
@@ -29,6 +29,7 @@ const Name = styled.span`
   margin-left: 10px;
   text-transform: Uppercase;
   font-weight: bold;
+  text-shadow: 1px 1px 5px black;
 `;
 
 const Error = styled.li`
@@ -43,15 +44,14 @@ const Message = styled.span`
   margin-left: 10px;
   text-transform: Uppercase;
   font-weight: bold;
+  text-shadow: 1px 1px 5px black;
 `;
 
 // club의 suqad를 나타낼 modal
 const ClubSquadModal = ({ id }) => {
   const squads = useRecoilValue(squadsState);
+  const squad = squads.filter((squad) => squad.id === id)[0];
 
-  const squad = squads.filter((squad) => squad.id === Number(id))[0];
-
-  console.log('modal', squad, id);
   return (
     <Squad>
       {squad && squad.squad.length > 0 ? (
