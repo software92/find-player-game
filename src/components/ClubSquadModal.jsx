@@ -6,13 +6,14 @@ const Squad = styled.ul`
   position: absolute;
   top: 0;
   right: -210px;
-  height: 300px;
+  width: 230px;
+  height: ${(props) => (props.isSquadsLoading ? null : '300px')};
   z-index: 3;
   border: 2px solid grey;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  overflow-y: scroll;
+  overflow-y: ${(props) => (props.isSquadsLoading ? null : 'scroll')};
 `;
 const PlayerInfo = styled.li`
   line-height: 30px;
@@ -53,7 +54,7 @@ const ClubSquadModal = ({ id }) => {
   const squad = squads.filter((squad) => squad.id === id)[0];
 
   return (
-    <Squad>
+    <Squad isSquadsLoading={isSquadsLoading}>
       {!isSquadsLoading ? (
         squad.squad.length > 0 &&
         squad.squad.map((player) => (

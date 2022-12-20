@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
@@ -17,15 +18,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
-    <RecoilRoot>
-      <Helmet>
-        <title>Find a football player game</title>
-      </Helmet>
-      <GlobalStyle />
-      <Main />
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <Helmet>
+          <title>Find a football player game</title>
+        </Helmet>
+        <GlobalStyle />
+        <Main />
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 };
 
