@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getClubs, getSquad } from '../api';
-import { clubsState, squadsState } from '../atom';
+import { clubsState, isSquadsLoadingState, squadsState } from '../atom';
 import Club from './Club';
 
 const ClubList = styled.div`
@@ -25,6 +25,7 @@ const Loader = styled.span`
 
 const ClubViews = () => {
   const [isClubsLoading, setIsClubsLoading] = useState(true);
+  const setIsSquadsLoading = useSetRecoilState(isSquadsLoadingState);
   const [clubs, setClubs] = useRecoilState(clubsState);
   const setSquads = useSetRecoilState(squadsState);
 
@@ -50,7 +51,8 @@ const ClubViews = () => {
       totalSquad.push(tempClubObj);
     }
     setSquads(totalSquad);
-  }, [clubs, setSquads]);
+    setIsSquadsLoading(false);
+  }, [clubs, setSquads, setIsSquadsLoading]);
 
   // DOM이 처음 업데이트 된 후 최초 한 번만 실행
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { quizState, totalPlayerState } from '../atom';
+import { isSquadsLoadingState, quizState, totalPlayerState } from '../atom';
 
 const StartButton = styled.div`
   width: 100%;
@@ -15,17 +15,19 @@ const StartButton = styled.div`
   &:hover {
     cursor: ${(props) => (props.isWait ? 'wait' : 'pointer')};
   }
-  & > * {
-    font-size: 50px;
-    font-weight: bold;
-  }
   z-index: 1;
+`;
+const Loader = styled.span`
+  font-size: 50px;
+  font-weight: bold;
+  margin: auto;
 `;
 
 const Cover = ({ setIsQuizStart }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const totalPlayer = useRecoilValue(totalPlayerState);
-  const setQuiz = useSetRecoilState(quizState);
+  const [quiz, setQuiz] = useRecoilState(quizState);
 
   const extractRandomNumber = (number) => Math.floor(Math.random() * number);
 
@@ -38,7 +40,6 @@ const Cover = ({ setIsQuizStart }) => {
   };
 
   const handleStartGame = () => {
-    if (isLoading) return;
     setIsLoading(true);
 
     setTimeout(() => {
@@ -50,7 +51,13 @@ const Cover = ({ setIsQuizStart }) => {
 
   return (
     <StartButton onClick={handleStartGame} isWait={isLoading}>
-      {isLoading ? <span>loading...</span> : <span>Game Start</span>}
+      {isSquadsLoading ? (
+        <Loader>Searching players...</Loader>
+      ) : isLoading ? (
+        <Loader>loading...</Loader>
+      ) : (
+        <Loader>Game Start</Loader>
+      )}
     </StartButton>
   );
 };

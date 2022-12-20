@@ -15,6 +15,11 @@ export const quizState = atom({
   default: {},
 });
 
+export const isSquadsLoadingState = atom({
+  key: 'isSquadsLoading',
+  default: true,
+});
+
 // selector
 export const totalPlayerState = selector({
   key: 'totalPlayer',

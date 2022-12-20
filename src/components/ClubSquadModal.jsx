@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { squadsState } from '../atom';
+import { isSquadsLoadingState, squadsState } from '../atom';
 
 const Squad = styled.ul`
   position: absolute;
@@ -32,14 +32,14 @@ const Name = styled.span`
   text-shadow: 1px 1px 5px black;
 `;
 
-const Error = styled.li`
+const Loader = styled.li`
   height: 35px;
   text-align: left;
   display: flex;
   color: inherit;
   background-color: #ebebeb;
 `;
-const Message = styled.span`
+const Span = styled.span`
   margin: auto 0;
   margin-left: 10px;
   text-transform: Uppercase;
@@ -49,21 +49,23 @@ const Message = styled.span`
 
 // 클럽의 등록된 선수를 보여주는 Modal
 const ClubSquadModal = ({ id }) => {
+  const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const squads = useRecoilValue(squadsState);
   const squad = squads.filter((squad) => squad.id === id)[0];
 
   return (
     <Squad>
-      {squad && squad.squad.length > 0 ? (
+      {!isSquadsLoading ? (
+        squad.squad.length > 0 &&
         squad.squad.map((player) => (
           <PlayerInfo key={player.id}>
             <Name>{player.name}</Name>
           </PlayerInfo>
         ))
       ) : (
-        <Error>
-          <Message>Can`t find players</Message>
-        </Error>
+        <Loader>
+          <Span>Loading...</Span>
+        </Loader>
       )}
     </Squad>
   );

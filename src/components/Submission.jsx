@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { quizState, totalPlayerState } from '../atom';
@@ -77,21 +77,22 @@ const Submission = () => {
   };
 
   // 전체 선수목록(totalPlayer)에서 특정 선수 filtering
-  const findPlayers = () => {
+  const findPlayers = useCallback(() => {
     const filterPlayer = totalPlayer.filter((player) => {
       const name = player.name.toUpperCase();
       return name.includes(value.trim());
     });
     setSearchingPlayers(filterPlayer);
-  };
+  }, [totalPlayer, value]);
 
   // 2개 이상의 문자를 입력했을 때부터, filtering
   useEffect(() => {
     if (value.length > 2) {
       findPlayers();
     }
-  }, [value]);
+  }, [value, findPlayers]);
 
+  // console.log('quiz', quiz);
   return (
     <Container>
       {isQuizStart ? null : <Cover setIsQuizStart={setIsQuizStart} />}
