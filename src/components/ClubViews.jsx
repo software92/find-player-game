@@ -8,14 +8,23 @@ import Club from './Club';
 const ClubList = styled.div`
   min-width: 15%;
   height: 200px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  ${(props) =>
+    props.isClubsLoading
+      ? 'display: flex'
+      : 'display: grid; grid-template-columns: repeat(3, 1fr);'};
   padding: 10px;
   background-color: #8ecae6;
   border-radius: 15px;
 `;
 
+const Loader = styled.span`
+  font-size: 30px;
+  font-weight: bold;
+  margin: auto;
+`;
+
 const ClubViews = () => {
+  const [isClubsLoading, setIsClubsLoading] = useState(true);
   const [clubs, setClubs] = useRecoilState(clubsState);
   const [squads, setSquads] = useRecoilState(squadsState);
 
@@ -23,6 +32,7 @@ const ClubViews = () => {
   const loadClubs = useCallback(async () => {
     const loadClubs = await getClubs();
     setClubs(loadClubs);
+    setIsClubsLoading(false);
   }, []);
 
   // loadClubs에서 호출한 각 클럽의 정보를 사용해 클럽의 스쿼드를 가져오고 새로운 객체 생성
@@ -55,10 +65,13 @@ const ClubViews = () => {
   }, [clubs, loadSquads]);
 
   return (
-    <ClubList>
-      {clubs && clubs.length > 0
-        ? clubs.map((club) => <Club key={club.id} {...club} />)
-        : 'loading..'}
+    <ClubList isClubsLoading={isClubsLoading}>
+      {isClubsLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        clubs.length > 0 &&
+        clubs.map((club) => <Club key={club.id} {...club} />)
+      )}
       {/* To be load style 추가 */}
     </ClubList>
   );
