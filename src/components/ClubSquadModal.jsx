@@ -47,7 +47,7 @@ const Message = styled.span`
   text-shadow: 1px 1px 5px black;
 `;
 
-// club의 suqad를 나타낼 modal
+// 클럽의 등록된 선수를 보여주는 Modal
 const ClubSquadModal = ({ id }) => {
   const squads = useRecoilValue(squadsState);
   const squad = squads.filter((squad) => squad.id === id)[0];

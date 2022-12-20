@@ -19,11 +19,14 @@ const ClubViews = () => {
   const [clubs, setClubs] = useRecoilState(clubsState);
   const [squads, setSquads] = useRecoilState(squadsState);
 
+  // api를 사용해 여러 개의 클럽 정보를 가져온다
   const loadClubs = useCallback(async () => {
     const loadClubs = await getClubs();
     setClubs(loadClubs);
   }, []);
 
+  // loadClubs에서 호출한 각 클럽의 정보를 사용해 클럽의 스쿼드를 가져오고 새로운 객체 생성
+  // 객체를 하나의 배열로 재 생성한다(totalSquad)
   const loadSquads = useCallback(async () => {
     let totalSquad = [];
 
@@ -39,18 +42,18 @@ const ClubViews = () => {
     setSquads(totalSquad);
   }, [clubs]);
 
+  // DOM이 처음 업데이트 된 후 최초 한 번만 실행
   useEffect(() => {
     loadClubs();
   }, [loadClubs]);
 
+  // api를 사용해 클럽의 정보를 clubs state에 저장하면 실행
   useEffect(() => {
     if (clubs.length > 0) {
       loadSquads();
     }
   }, [clubs, loadSquads]);
 
-  console.log('clubs', clubs);
-  console.log('squads arr', squads);
   return (
     <ClubList>
       {clubs && clubs.length > 0

@@ -29,6 +29,7 @@ const Cover = ({ setIsQuizStart }) => {
 
   const extractRandomNumber = (number) => Math.floor(Math.random() * number);
 
+  // 전체 선수목록(totalPlayer)에서 임의의 선수를 선택해 문제 선수로 입력
   const selectPlayer = () => {
     const randomPlayerNumber = extractRandomNumber(totalPlayer.length);
     const randomPlayer = totalPlayer[randomPlayerNumber];
@@ -40,7 +41,6 @@ const Cover = ({ setIsQuizStart }) => {
     if (isLoading) return;
     setIsLoading(true);
 
-    // api loading time (temp)
     setTimeout(() => {
       selectPlayer();
       setIsLoading(false);

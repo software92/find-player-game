@@ -56,8 +56,7 @@ const Submission = () => {
   const totalPlayer = useRecoilValue(totalPlayerState);
   const [searchingPlayers, setSearchingPlayers] = useState([]);
 
-  //   input에서 임의의 문자(검색되지 않은 선수)는 submit 하지 않음
-  // > 자동완성으로 검색된 선수만 submit 허용
+  // 자동완성(AutoSearch)으로 검색된 선수만 submit 허용
   const onSubmit = (e) => {
     e.preventDefault();
     const newValue = value.trim();
@@ -65,7 +64,6 @@ const Submission = () => {
     if (searchingPlayers.length === 0) return;
 
     const isEqual = Object.is(quiz, searchingPlayers[0]);
-    console.log('eq', isEqual);
 
     const hintObj = { q: quiz, answer: searchingPlayers[0] };
     setHintArr((prev) => [hintObj, ...prev]);
@@ -78,7 +76,7 @@ const Submission = () => {
     setValue(answerRef.current.value.toUpperCase());
   };
 
-  // totalPlayer에서 특정 선수 filtering
+  // 전체 선수목록(totalPlayer)에서 특정 선수 filtering
   const findPlayers = () => {
     const filterPlayer = totalPlayer.filter((player) => {
       const name = player.name.toUpperCase();
@@ -87,6 +85,7 @@ const Submission = () => {
     setSearchingPlayers(filterPlayer);
   };
 
+  // 2개 이상의 문자를 입력했을 때부터, filtering
   useEffect(() => {
     if (value.length > 2) {
       findPlayers();
@@ -114,13 +113,12 @@ const Submission = () => {
             value={value}
           />
 
-          {/* 선수 검색 시 자동완성 */}
-          {value.length > 2 ? (
+          {value.length > 2 && (
             <AutoSearch
               searchingPlayers={searchingPlayers}
               setValue={setValue}
             />
-          ) : null}
+          )}
         </form>
       </AnswerBox>
       {hintArr.length > 0 && <HintBox hintArr={hintArr} />}

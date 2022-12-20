@@ -36,7 +36,6 @@ const Hint = styled.div`
 
 const ClubEmblem = styled.img`
   width: 50%;
-  // border: 0.5px solid black;
 `;
 const Position = styled.div``;
 const Age = styled.div``;

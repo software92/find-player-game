@@ -31,6 +31,7 @@ const Name = styled.span`
   margin: auto 0;
 `;
 
+// 자동완성된 리스트에서 선수를 선택하면 입력창의 value를 해당 선수 이름으로 변경
 const AutoSearch = ({ searchingPlayers, setValue }) => {
   const pickPlayer = (e) => {
     const {
