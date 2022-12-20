@@ -39,11 +39,21 @@ const ClubViews = () => {
   const loadSquads = useCallback(() => {
     // api 호출 데이터 대신 temp data 사용
     if (clubs.length > 0) {
-      const squads = [
-        { id: 11, squad: tempSquad1 },
-        { id: 148, squad: tempSquad2 },
+      const tempSquadArr = [
+        {
+          id: 11,
+          clubImage:
+            'https://tmssl.akamaized.net/images/wappen/medium/11.png?lm=1489787850',
+          squad: tempSquad1,
+        },
+        {
+          id: 148,
+          clubImage:
+            'https://tmssl.akamaized.net/images/wappen/medium/281.png?lm=1467356331',
+          squad: tempSquad2,
+        },
       ];
-      setSquads(squads);
+      setSquads(tempSquadArr);
     }
   }, [clubs]);
 

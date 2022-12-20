@@ -25,7 +25,11 @@ export const totalPlayerState = selector({
     // 선수 정보에 클럽 id를 포함시킴
     for (const club of totalSquad) {
       club.squad.forEach((player) => {
-        totalPlayer.push({ clubId: club.id, ...player });
+        totalPlayer.push({
+          clubId: club.id,
+          clubImage: club.clubImage,
+          ...player,
+        });
       });
     }
 
