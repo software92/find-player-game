@@ -20,12 +20,8 @@ const Emblem = styled.img`
 const Club = ({ clubImage, clubName, id }) => {
   const [isShow, setShow] = useState(false);
 
-  const showClub = async () => {
-    setShow(true);
-  };
-  const outClub = () => {
-    setShow(false);
-  };
+  const showClub = async () => setShow(true);
+  const outClub = () => setShow(false);
 
   return (
     <Container onMouseOver={() => showClub()} onMouseOut={() => outClub()}>

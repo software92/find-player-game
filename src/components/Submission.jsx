@@ -7,21 +7,28 @@ import Cover from './Cover';
 import HintBox from './HintBox';
 
 const Container = styled.div`
-  width: 40%;
+  width: 600px;
   min-height: 300px;
   border-radius: 15px;
   position: relative;
   margin-bottom: 100px;
+  @media screen and (max-width: 650px) {
+    width: 100%;
+  }
 `;
 
 const AnswerBox = styled.div`
-  width: 85%;
+  width: 500px;
   text-align: center;
   margin: 0 auto;
   margin-bottom: 30px;
   background-color: white;
-  border-radius: 25px;
+  border-radius: 15px;
   padding-bottom: 15px;
+  @media screen and (max-width: 650px) {
+    width: 100%;
+    border-radius: 0;
+  }
 `;
 const Photo = styled.img`
   width: 160px;
@@ -92,7 +99,6 @@ const Submission = () => {
     }
   }, [value, findPlayers]);
 
-  // console.log('quiz', quiz);
   return (
     <Container>
       {isQuizStart ? null : <Cover setIsQuizStart={setIsQuizStart} />}

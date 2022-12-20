@@ -4,8 +4,6 @@ const HintList = styled.ul`
   margin-bottom: 40px;
 `;
 const HintItem = styled.li`
-  width: 80%;
-  margin: 0 auto;
   margin-top: 30px;
 `;
 const WrongAnswer = styled.h3`
@@ -15,15 +13,15 @@ const WrongAnswer = styled.h3`
   margin-bottom: 15px;
 `;
 const Row = styled.div`
-  height: 80px;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
 `;
 const Hint = styled.div`
+  width: 80px;
+  height: 80px;
   border: 2px solid white;
   border-radius: 30%;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +34,7 @@ const ClubEmblem = styled.img`
   width: 50%;
 `;
 const Nation = styled.img`
-  width: 60%;
+  width: 50%;
   border: 0.5px solid black;
 `;
 

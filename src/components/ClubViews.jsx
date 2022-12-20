@@ -6,8 +6,8 @@ import { clubsState, isSquadsLoadingState, squadsState } from '../atom';
 import Club from './Club';
 
 const ClubList = styled.div`
-  min-width: 15%;
-  height: 200px;
+  width: 230px;
+  height: 230px;
   ${(props) =>
     props.isClubsLoading
       ? 'display: flex'
@@ -15,6 +15,9 @@ const ClubList = styled.div`
   padding: 10px;
   background-color: #8ecae6;
   border-radius: 15px;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `;
 
 const Loader = styled.span`

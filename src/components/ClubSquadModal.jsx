@@ -6,18 +6,17 @@ const Squad = styled.ul`
   position: absolute;
   top: 0;
   right: -210px;
+  height: 300px;
   z-index: 3;
-  width: 210px;
-  border: 1px solid grey;
+  border: 2px solid grey;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  overflow: hidden;
+  overflow-y: scroll;
 `;
 const PlayerInfo = styled.li`
-  height: 35px;
+  line-height: 30px;
   text-align: left;
-  display: flex;
   color: inherit;
   background-color: #ebebeb;
   &:nth-child(2n) {
