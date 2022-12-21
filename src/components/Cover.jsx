@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { isSquadsLoadingState, quizState, totalPlayerState } from '../atom';
@@ -24,7 +23,6 @@ const Loader = styled.span`
 `;
 
 const Cover = ({ setIsQuizStart }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const totalPlayer = useRecoilValue(totalPlayerState);
   const setQuiz = useSetRecoilState(quizState);
@@ -40,20 +38,19 @@ const Cover = ({ setIsQuizStart }) => {
   };
 
   const handleStartGame = () => {
-    setIsLoading(true);
+    console.log('before');
+    if (isSquadsLoading) return;
+    console.log('after');
 
-    setTimeout(() => {
-      selectPlayer();
-      setIsLoading(false);
-      setIsQuizStart(true);
-    }, 2000);
+    selectPlayer();
+    setIsQuizStart(true);
   };
 
   return (
-    <StartButton onClick={handleStartGame} isWait={isLoading}>
+    <StartButton onClick={handleStartGame} isWait={isSquadsLoading}>
       {isSquadsLoading ? (
         <Loader>Searching players...</Loader>
-      ) : isLoading ? (
+      ) : isSquadsLoading ? (
         <Loader>loading...</Loader>
       ) : (
         <Loader>Game Start</Loader>
