@@ -38,9 +38,7 @@ const Cover = ({ setIsQuizStart }) => {
   };
 
   const handleStartGame = () => {
-    console.log('before');
     if (isSquadsLoading) return;
-    console.log('after');
 
     selectPlayer();
     setIsQuizStart(true);
