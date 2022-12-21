@@ -4,7 +4,7 @@ const URL = `${BASE_URL}/competitions/get-table?id=GB1&seasonID=2022&domain=de`;
 const options = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': '0557557c9dmsh5cd9939f56d5fcbp12a2f4jsn4a89d20a0da3',
+    'X-RapidAPI-Key': '22221d3bf9mshd33c5e296c81e3ap15991ajsn87ee0dd0f6ab',
     'X-RapidAPI-Host': 'transfermarket.p.rapidapi.com',
   },
 };

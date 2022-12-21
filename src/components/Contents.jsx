@@ -18,7 +18,7 @@ const Contents = () => {
   return (
     <Container>
       <ClubViews />
-      {/* <Submission /> */}
+      <Submission />
     </Container>
   );
 };
