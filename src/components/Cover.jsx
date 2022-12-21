@@ -1,28 +1,39 @@
+import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { isSquadsLoadingState, quizState, totalPlayerState } from '../atom';
 
+const RLink = styled(Link)`
+  @media screen and (max-width: 650px) {
+    width: 100%;
+    border-radius: 0;
+  }
+`;
 const StartButton = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 280px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
   background-color: red;
   border-radius: 15px;
   &:hover {
     cursor: ${(props) => (props.isWait ? 'wait' : 'pointer')};
   }
   z-index: 1;
+  @media screen and (max-width: 650px) {
+    width: 100%;
+    border-radius: 0;
+  }
 `;
 const Loader = styled.span`
   font-size: 50px;
   font-weight: bold;
+  color: white;
   margin: auto;
 `;
 
-const Cover = ({ setIsQuizStart }) => {
+const Cover = () => {
   const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const totalPlayer = useRecoilValue(totalPlayerState);
   const setQuiz = useSetRecoilState(quizState);
@@ -41,19 +52,20 @@ const Cover = ({ setIsQuizStart }) => {
     if (isSquadsLoading) return;
 
     selectPlayer();
-    setIsQuizStart(true);
   };
 
   return (
-    <StartButton onClick={handleStartGame} isWait={isSquadsLoading}>
-      {isSquadsLoading ? (
-        <Loader>Searching players...</Loader>
-      ) : isSquadsLoading ? (
-        <Loader>loading...</Loader>
-      ) : (
-        <Loader>Game Start</Loader>
-      )}
-    </StartButton>
+    <RLink to='/submission'>
+      <StartButton onClick={handleStartGame} isWait={isSquadsLoading}>
+        {isSquadsLoading ? (
+          <Loader>Searching players...</Loader>
+        ) : isSquadsLoading ? (
+          <Loader>loading...</Loader>
+        ) : (
+          <Loader>Game Start</Loader>
+        )}
+      </StartButton>
+    </RLink>
   );
 };
 

@@ -7,11 +7,12 @@ const AutoSearchBox = styled.ul`
   color: red;
   margin: 0 auto;
   border: 1.3px solid rgba(59, 59, 59, 0.4);
+  background-color: white;
+  border-radius: 0 0 5px 5px;
 `;
 const PlayerBox = styled.li`
   width: 100%;
   height: 35px;
-  border-radius: 5px;
   font-size: 15spx;
   font-weight: bold;
   color: rgba(59, 59, 59, 0.5);
@@ -19,6 +20,8 @@ const PlayerBox = styled.li`
   align-items: center;
   gap: 10px;
   padding-left: 10px;
+  background-color: white;
+  box-shadow: 0px 3px 13px black;
   &:hover {
     cursor: pointer;
   }

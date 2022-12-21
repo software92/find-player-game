@@ -1,9 +1,8 @@
 import { Helmet } from 'react-helmet';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import Main from './components/Main';
+import Contents from './components/Contents';
+import Header from './components/Header';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -16,21 +15,21 @@ const GlobalStyle = createGlobalStyle`
     background-color: #001d3d;
     color: white;
   }
+  a {
+    text-decoration: none;
+  }
 `;
-
-const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <Helmet>
-          <title>Find a football player game</title>
-        </Helmet>
-        <GlobalStyle />
-        <Main />
-      </RecoilRoot>
-    </QueryClientProvider>
+    <div>
+      <Helmet>
+        <title>Find a football player game</title>
+      </Helmet>
+      <GlobalStyle />
+      <Header />
+      <Contents />
+    </div>
   );
 };
 

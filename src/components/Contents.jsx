@@ -1,6 +1,6 @@
 import styled from 'styled-components';
+import Router from '../Router';
 import ClubViews from './ClubViews';
-import Submission from './Submission';
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const Contents = () => {
   return (
     <Container>
       <ClubViews />
-      <Submission />
+      <Router />
     </Container>
   );
 };

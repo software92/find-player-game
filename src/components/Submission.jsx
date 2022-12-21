@@ -3,22 +3,22 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { quizState, totalPlayerState } from '../atom';
 import AutoSearch from './AutoSearch';
-import Cover from './Cover';
 import HintBox from './HintBox';
 
 const Container = styled.div`
-  width: 600px;
+  width: 500px;
   min-height: 300px;
   border-radius: 15px;
-  position: relative;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
   @media screen and (max-width: 650px) {
     width: 100%;
   }
 `;
 
 const AnswerBox = styled.div`
-  width: 500px;
+  position: relative;
+  width: 100%;
+  height: 280px;
   text-align: center;
   margin: 0 auto;
   margin-bottom: 30px;
@@ -57,7 +57,6 @@ const Submission = () => {
   const answerRef = useRef();
   const [value, setValue] = useState('');
   const [hintArr, setHintArr] = useState([]);
-  const [isQuizStart, setIsQuizStart] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const quiz = useRecoilValue(quizState);
   const totalPlayer = useRecoilValue(totalPlayerState);
@@ -101,7 +100,6 @@ const Submission = () => {
 
   return (
     <Container>
-      {isQuizStart ? null : <Cover setIsQuizStart={setIsQuizStart} />}
       <AnswerBox>
         <Photo
           draggable={false}

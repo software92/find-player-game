@@ -77,7 +77,7 @@ const HintBox = ({ hintArr }) => {
 
         return (
           <HintItem key={index}>
-            <WrongAnswer>{name1}</WrongAnswer>
+            <WrongAnswer>{name1.toUpperCase()}</WrongAnswer>
             <Row>
               <Hint isEqual={isEqual(clubId1, clubId2)}>
                 <ClubEmblem src={clubImage1} />
