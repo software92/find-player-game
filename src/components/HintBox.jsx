@@ -82,7 +82,12 @@ const HintBox = ({ hintArr }) => {
               <Hint isEqual={isEqual(clubId1, clubId2)}>
                 <ClubEmblem src={clubImage1} />
               </Hint>
-              <Hint isEqual={isEqual(positionId1, positionId2)}>
+              <Hint
+                isEqual={isEqual(
+                  getPosition(positionId1),
+                  getPosition(positionId2)
+                )}
+              >
                 <span>{getPosition(positionId1)}</span>
               </Hint>
               <Hint isEqual={isEqual(age1, age2)}>
