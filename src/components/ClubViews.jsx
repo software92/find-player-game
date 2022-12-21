@@ -36,6 +36,10 @@ const ClubViews = () => {
     {
       onError: (err) => console.log('query err', err),
       notifyOnChangeProps: ['isLoading', 'data'],
+      refetchOnMount: false,
+      select: (data) => data.table.slice(0, 5),
+      staleTime: Infinity,
+      cacheTime: Infinity,
     }
   );
 
@@ -46,7 +50,7 @@ const ClubViews = () => {
 
   return (
     <ClubList isClubsLoading={isClubsLoading}>
-      {false ? (
+      {isClubsLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         !!clubs &&

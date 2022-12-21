@@ -31,6 +31,10 @@ const Club = ({ clubImage, clubName, id }) => {
     {
       onError: (err) => console.log('club squad err', err),
       notifyOnChangeProps: ['isLoading', 'data'],
+      refetchOnMount: false,
+      select: (data) => data.squad,
+      staleTime: Infinity,
+      cacheTime: Infinity,
     }
   );
 

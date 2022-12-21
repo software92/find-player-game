@@ -15,7 +15,7 @@ export const getClubs = () => {
     options
   )
     .then((response) => response.json())
-    .then((response) => response.table.slice(0, 5))
+    .then((response) => response)
     .catch((err) => console.log(err));
 };
 
@@ -25,6 +25,6 @@ export const getSquad = (clubId) => {
     options
   )
     .then((response) => response.json())
-    .then((response) => response.squad)
+    .then((response) => response)
     .catch((err) => console.error(err));
 };
