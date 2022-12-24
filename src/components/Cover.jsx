@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { isSquadsLoadingState, quizState, totalPlayerState } from '../atom';
+import { quizState, totalPlayerState } from '../atom';
 
 const RLink = styled(Link)`
   @media screen and (max-width: 650px) {
@@ -34,9 +35,9 @@ const Loader = styled.span`
 `;
 
 const Cover = () => {
-  const isSquadsLoading = useRecoilValue(isSquadsLoadingState);
   const totalPlayer = useRecoilValue(totalPlayerState);
   const setQuiz = useSetRecoilState(quizState);
+  const [isTotalPlayer, setIsTotalPlayer] = useState(false);
 
   const extractRandomNumber = (number) => Math.floor(Math.random() * number);
 
@@ -49,21 +50,19 @@ const Cover = () => {
   };
 
   const handleStartGame = () => {
-    if (isSquadsLoading) return;
+    if (isTotalPlayer) return;
 
     selectPlayer();
   };
 
+  useEffect(() => {
+    setIsTotalPlayer(!!totalPlayer && totalPlayer.length > 0);
+  }, [totalPlayer]);
+
   return (
-    <RLink to='/submission'>
-      <StartButton onClick={handleStartGame} isWait={isSquadsLoading}>
-        {isSquadsLoading ? (
-          <Loader>Searching players...</Loader>
-        ) : isSquadsLoading ? (
-          <Loader>loading...</Loader>
-        ) : (
-          <Loader>Game Start</Loader>
-        )}
+    <RLink to={!isTotalPlayer ? '#' : '/submission'}>
+      <StartButton onClick={handleStartGame} isWait={!isTotalPlayer}>
+        <Loader>{!isTotalPlayer ? 'Stand by' : 'Game Start'}</Loader>
       </StartButton>
     </RLink>
   );
