@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import Contents from './components/Contents';
+import Contents from './Contents';
 import Header from './components/Header';
 
 const GlobalStyle = createGlobalStyle`

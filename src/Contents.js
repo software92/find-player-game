@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Router from '../Router';
-import ClubViews from './ClubViews';
+import Router from './Router';
+import ClubViews from './components/ClubViews';
 
 const Container = styled.div`
   display: flex;
