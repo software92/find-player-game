@@ -3,7 +3,7 @@ const BASE_URL = 'https://transfermarket.p.rapidapi.com';
 const options = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': 'b66200a805msh9de49bb31304e19p144786jsnc7f28372619d',
+    'X-RapidAPI-Key': '096ecdbaa9mshfbed1d9c56b28ffp1ce416jsn5fbd5eba454b',
     'X-RapidAPI-Host': 'transfermarket.p.rapidapi.com',
   },
 };

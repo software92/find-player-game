@@ -1,19 +1,17 @@
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { squadsState } from '../atom';
 
 const Squad = styled.ul`
   position: absolute;
   top: 0;
   right: -210px;
   width: 230px;
-  height: ${(props) => (props.isClubSquadLoading ? null : '300px')};
+  height: 300px;
   z-index: 3;
   border: 2px solid grey;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  overflow-y: ${(props) => (props.isClubSquadLoading ? null : 'scroll')};
+  overflow-y: scroll;
 `;
 const PlayerInfo = styled.li`
   line-height: 30px;
@@ -48,26 +46,21 @@ const Span = styled.span`
 `;
 
 // 클럽의 등록된 선수를 보여주는 Modal
-const ClubSquadModal = ({ id, isClubSquadLoading }) => {
-  const squads = useRecoilValue(squadsState);
-  const squad = squads.filter((squad) => squad.id === id)[0];
-
-  return (
-    <Squad isClubSquadLoading={isClubSquadLoading}>
-      {!isClubSquadLoading ? (
-        squad.squad.length > 0 &&
-        squad.squad.map((player) => (
-          <PlayerInfo key={player.id}>
-            <Name>{player.name}</Name>
-          </PlayerInfo>
-        ))
-      ) : (
-        <Loader>
-          <Span>Loading...</Span>
-        </Loader>
-      )}
-    </Squad>
-  );
-};
+const ClubSquadModal = ({ isClubSquadLoading, squad }) => (
+  <Squad isClubSquadLoading={isClubSquadLoading}>
+    {!isClubSquadLoading ? (
+      squad.squad.length > 0 &&
+      squad.squad.map((player) => (
+        <PlayerInfo key={player.id}>
+          <Name>{player.name}</Name>
+        </PlayerInfo>
+      ))
+    ) : (
+      <Loader>
+        <Span>Loading...</Span>
+      </Loader>
+    )}
+  </Squad>
+);
 
 export default ClubSquadModal;

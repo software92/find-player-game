@@ -18,7 +18,7 @@ const Contents = () => {
   return (
     <Container>
       <ClubViews />
-      {/* <Router /> */}
+      <Router />
     </Container>
   );
 };

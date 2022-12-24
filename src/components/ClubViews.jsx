@@ -16,6 +16,9 @@ const ClubList = styled.div`
   padding: 10px;
   background-color: #8ecae6;
   border-radius: 15px;
+  &:hover {
+    cursor: ${(props) => (props.isClubsLoading ? 'wait' : 'cursor')};
+  }
   @media screen and (max-width: 1000px) {
     display: none;
   }
@@ -37,7 +40,7 @@ const ClubViews = () => {
       onError: (err) => console.log('query err', err),
       notifyOnChangeProps: ['isLoading', 'data'],
       refetchOnMount: false,
-      select: (data) => data.table.slice(0, 5),
+      select: (data) => data.table.slice(0, 3),
       staleTime: Infinity,
       cacheTime: Infinity,
     }

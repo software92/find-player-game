@@ -11,7 +11,7 @@ const Container = styled.div`
   font-size: 15px;
   text-align: center;
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.isClubSquadLoading ? 'wait' : 'pointer')};
   }
 `;
 
@@ -23,6 +23,7 @@ const Emblem = styled.img`
 
 const Club = ({ clubImage, clubName, id }) => {
   const [isShow, setShow] = useState(false);
+  const [squad, setSquad] = useState([]);
   const setSquads = useSetRecoilState(squadsState);
 
   const { isLoading: isClubSquadLoading, data: clubSquad } = useQuery(
@@ -45,18 +46,33 @@ const Club = ({ clubImage, clubName, id }) => {
         clubImage,
         squad: clubSquad,
       };
+      setSquad(clubObj);
       setSquads((prev) => [clubObj, ...prev]);
     }
-  }, [setSquads, clubSquad, id, clubImage]);
+  }, [setSquad, setSquads, clubSquad, id, clubImage]);
 
-  const showClub = () => setShow(true);
-  const outClub = () => setShow(false);
+  const showClub = () => {
+    if (isClubSquadLoading) return;
+    setShow(true);
+  };
+  const outClub = () => {
+    if (isClubSquadLoading) return;
+    setShow(false);
+  };
 
   return (
-    <Container onMouseOver={() => showClub()} onMouseOut={() => outClub()}>
+    <Container
+      isClubSquadLoading={isClubSquadLoading}
+      onMouseOver={() => showClub()}
+      onMouseOut={() => outClub()}
+    >
       <Emblem src={clubImage} />
       {isShow && (
-        <ClubSquadModal id={id} isClubSquadLoading={isClubSquadLoading} />
+        <ClubSquadModal
+          id={id}
+          isClubSquadLoading={isClubSquadLoading}
+          squad={squad}
+        />
       )}
     </Container>
   );
