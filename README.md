@@ -9,6 +9,18 @@
 - media query
 - react-helmet
 
+## Screen
+
+### Actions
+
+#### Loading
+
+<img width='30%' src='https://user-images.githubusercontent.com/95457388/209466525-887f6d55-c667-49b6-bcd8-a9c746ebb5af.gif' />
+
+#### Playing
+
+<img width='30%' src='https://user-images.githubusercontent.com/95457388/209466528-305cde4e-339f-47e3-8cf0-585e895c3661.gif' />
+
 ## How to play
 
 ### Requirement
