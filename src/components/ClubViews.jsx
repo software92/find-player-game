@@ -40,11 +40,12 @@ const ClubViews = () => {
       onError: (err) => console.log('query err', err),
       notifyOnChangeProps: ['isLoading', 'data'],
       refetchOnMount: false,
-      select: (data) => data.table.slice(0, 3),
+      select: (data) => data.table.slice(0, 5),
       staleTime: Infinity,
       cacheTime: Infinity,
     }
   );
+  console.log(isClubsLoading);
 
   // fetcing이 끝난 후(data를 가져오면) setState 실행
   useEffect(() => {
