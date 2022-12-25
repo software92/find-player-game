@@ -5,12 +5,8 @@ import Submission from './components/Submission';
 const Router = () => (
   <BrowserRouter>
     <Switch>
-      <Route path='/submission'>
-        <Submission />
-      </Route>
-      <Route path='/'>
-        <Cover />
-      </Route>
+      <Route path='/submission' component={Submission} />
+      <Route path='/' component={Cover} />
     </Switch>
   </BrowserRouter>
 );

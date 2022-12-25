@@ -50,7 +50,7 @@ const Cover = () => {
   };
 
   const handleStartGame = () => {
-    if (isTotalPlayer) return;
+    if (!isTotalPlayer) return;
 
     selectPlayer();
   };
