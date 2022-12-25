@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -8,11 +9,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin: 5px auto;
-`;
-const Title = styled.h1`
-  font-size: 40px;
-  font-weight: bold;
-  height: 55%;
 `;
 const SubContainer = styled.div`
   display: flex;
@@ -25,24 +21,31 @@ const SubContainer = styled.div`
 const Text = styled.span`
   margin: auto;
 `;
-const Link = styled.a`
+const ReferenceLink = styled.a`
   color: red;
   font-weight: bold;
+`;
+
+const HomeLink = styled(Link)`
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  height: 55%;
 `;
 
 const Header = () => {
   return (
     <Container>
-      <Title>Find a your player !</Title>
+      <HomeLink to='/'>Find a your player !</HomeLink>
       <SubContainer>
         <Text>
           {'original: '}
-          <Link
+          <ReferenceLink
             href='https://playfootball.games/who-are-ya/world-cup'
             target='_blank'
           >
             https://playfootball.games/who-are-ya/world-cup
-          </Link>
+          </ReferenceLink>
         </Text>
       </SubContainer>
     </Container>
