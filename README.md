@@ -9,6 +9,18 @@
 - media query
 - react-helmet
 
+## Screen
+
+### Actions
+
+#### Loading
+
+<img width='30%' src='https://user-images.githubusercontent.com/95457388/209466746-d8ba29a6-4335-4c5d-9016-8e248ad100b2.gif' />
+
+#### Playing
+
+<img width='30%' src='https://user-images.githubusercontent.com/95457388/209466525-887f6d55-c667-49b6-bcd8-a9c746ebb5af.gif' />
+
 ## How to play
 
 ### Requirement
@@ -33,4 +45,5 @@
 ### 참고 사이트
 
 [Who are ya!](https://playfootball.games/who-are-ya/world-cup)
+
 ![game](src/imgs/game.PNG)
