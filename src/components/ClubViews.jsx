@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getClubs } from '../api';
 import { clubsState } from '../atom';
+import useFetchingClubsData from '../hooks/useFetchingData';
 import Club from './Club';
 
 const ClubList = styled.div`
@@ -31,26 +32,9 @@ const Loader = styled.span`
 `;
 
 const ClubViews = () => {
-  const [clubs, setClubs] = useRecoilState(clubsState);
-
-  const { isLoading: isClubsLoading, data: loadClubs } = useQuery(
-    'clubs',
-    getClubs,
-    {
-      onError: (err) => console.log('query err', err),
-      notifyOnChangeProps: ['isLoading', 'data'],
-      refetchOnMount: false,
-      select: (data) => data.table.slice(0, 5),
-      staleTime: Infinity,
-      cacheTime: Infinity,
-    }
-  );
-  console.log(isClubsLoading);
-
-  // fetcing이 끝난 후(data를 가져오면) setState 실행
-  useEffect(() => {
-    setClubs(loadClubs);
-  }, [setClubs, loadClubs]);
+  // View, logic을 처리하는 부분을 구분 (코드리뷰)
+  // custom hook을 사용해 로직과 화면을 처리하는 컴포넌트를 분리
+  const [isClubsLoading, clubs] = useFetchingClubsData(['clubs'], getClubs);
 
   return (
     <ClubList isClubsLoading={isClubsLoading}>
