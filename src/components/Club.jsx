@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import { getSquad } from '../api';
-import useFetchingData2 from '../hooks/useFetchingData2';
+import useFetchingSquadData from '../hooks/useFetchingSquadData';
 import ClubSquadModal from './ClubSquadModal';
 
 const Container = styled.div`
@@ -20,20 +19,8 @@ const Emblem = styled.img`
 `;
 
 const Club = ({ clubImage, clubName, id }) => {
-  const [isShow, setShow] = useState(false);
-  const [isClubSquadLoading, squad] = useFetchingData2(
-    [clubName, 'squads'],
-    getSquad(id)
-  );
-
-  const showClub = () => {
-    if (isClubSquadLoading) return;
-    setShow(true);
-  };
-  const outClub = () => {
-    if (isClubSquadLoading) return;
-    setShow(false);
-  };
+  const [isClubSquadLoading, squad, showClub, outClub, isShow] =
+    useFetchingSquadData([clubName, 'squads'], getSquad(id));
 
   return (
     <Container

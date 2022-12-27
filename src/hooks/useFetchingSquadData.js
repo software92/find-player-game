@@ -3,7 +3,8 @@ import { useQuery } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { squadsState } from '../atom';
 
-const useFetchingData2 = (key, func, clubImage, id) => {
+const useFetchingSquadData = (key, func, clubImage, id) => {
+  const [isShow, setShow] = useState(false);
   const [squad, setSquad] = useState([]);
   const setSquads = useSetRecoilState(squadsState);
 
@@ -16,6 +17,14 @@ const useFetchingData2 = (key, func, clubImage, id) => {
     staleTime: Infinity,
     cacheTime: Infinity,
   });
+  const showClub = () => {
+    if (isLoading) return;
+    setShow(true);
+  };
+  const outClub = () => {
+    if (isLoading) return;
+    setShow(false);
+  };
 
   useEffect(() => {
     if (!!data && data.length > 0) {
@@ -27,9 +36,9 @@ const useFetchingData2 = (key, func, clubImage, id) => {
       setSquad(clubObj);
       setSquads((prev) => [clubObj, ...prev]);
     }
-  }, [setSquad, setSquads, data, id, clubImage]);
+  }, [setSquads, data, id, clubImage]);
 
-  return [isLoading, squad];
+  return [isLoading, squad, showClub, outClub, isShow];
 };
 
-export default useFetchingData2;
+export default useFetchingSquadData;

@@ -1,10 +1,6 @@
-import { useEffect } from 'react';
-import { useQuery } from 'react-query';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getClubs } from '../api';
-import { clubsState } from '../atom';
-import useFetchingClubsData from '../hooks/useFetchingData';
+import useFetchingClubsData from '../hooks/useFetchingClubsData';
 import Club from './Club';
 
 const ClubList = styled.div`
