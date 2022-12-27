@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { getSquad } from '../api';
-import { squadsState } from '../atom';
+import useFetchingData2 from '../hooks/useFetchingData2';
 import ClubSquadModal from './ClubSquadModal';
 
 const Container = styled.div`
@@ -23,33 +21,10 @@ const Emblem = styled.img`
 
 const Club = ({ clubImage, clubName, id }) => {
   const [isShow, setShow] = useState(false);
-  const [squad, setSquad] = useState([]);
-  const setSquads = useSetRecoilState(squadsState);
-
-  const { isLoading: isClubSquadLoading, data: clubSquad } = useQuery(
+  const [isClubSquadLoading, squad] = useFetchingData2(
     [clubName, 'squads'],
-    () => getSquad(id),
-    {
-      onError: (err) => console.log('club squad err', err),
-      notifyOnChangeProps: ['isLoading', 'data'],
-      refetchOnMount: false,
-      select: (data) => data.squad,
-      staleTime: Infinity,
-      cacheTime: Infinity,
-    }
+    getSquad(id)
   );
-
-  useEffect(() => {
-    if (!!clubSquad && clubSquad.length > 0) {
-      const clubObj = {
-        id,
-        clubImage,
-        squad: clubSquad,
-      };
-      setSquad(clubObj);
-      setSquads((prev) => [clubObj, ...prev]);
-    }
-  }, [setSquad, setSquads, clubSquad, id, clubImage]);
 
   const showClub = () => {
     if (isClubSquadLoading) return;
