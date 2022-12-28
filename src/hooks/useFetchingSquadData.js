@@ -26,12 +26,14 @@ const useFetchingSquadData = (key, func, clubImage, id) => {
 
   useEffect(() => {
     if (!!squad) {
-      const clubObj = {
-        id,
-        clubImage,
-        squad,
-      };
-      setSquads((prev) => [clubObj, ...prev]);
+      setSquads((prev) => [
+        {
+          id,
+          clubImage,
+          squad,
+        },
+        ...prev,
+      ]);
     }
   }, [id, clubImage, setSquads, squad]);
 
