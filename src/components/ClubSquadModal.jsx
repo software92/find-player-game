@@ -49,8 +49,8 @@ const Span = styled.span`
 const ClubSquadModal = ({ isClubSquadLoading, squad }) => (
   <Squad isClubSquadLoading={isClubSquadLoading}>
     {!isClubSquadLoading ? (
-      squad.squad.length > 0 &&
-      squad.squad.map((player) => (
+      squad.length > 0 &&
+      squad.map((player) => (
         <PlayerInfo key={player.id}>
           <Name>{player.name}</Name>
         </PlayerInfo>

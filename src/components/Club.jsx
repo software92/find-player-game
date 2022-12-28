@@ -19,22 +19,18 @@ const Emblem = styled.img`
 `;
 
 const Club = ({ clubImage, clubName, id }) => {
-  const [isClubSquadLoading, squad, showClub, outClub, isShow] =
+  const [isClubSquadLoading, squad, handleMouseEvent, isShow] =
     useFetchingSquadData([clubName, 'squads'], getSquad(id));
 
   return (
     <Container
       isClubSquadLoading={isClubSquadLoading}
-      onMouseOver={() => showClub()}
-      onMouseOut={() => outClub()}
+      onMouseOver={handleMouseEvent(true)}
+      onMouseOut={handleMouseEvent(false)}
     >
       <Emblem src={clubImage} />
       {isShow && (
-        <ClubSquadModal
-          id={id}
-          isClubSquadLoading={isClubSquadLoading}
-          squad={squad}
-        />
+        <ClubSquadModal isClubSquadLoading={isClubSquadLoading} squad={squad} />
       )}
     </Container>
   );

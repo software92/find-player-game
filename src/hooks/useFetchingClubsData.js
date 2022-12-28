@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { clubsState } from '../atom';
 
 const useFetchingClubsData = (key, func) => {
-  const [clubs, setClubs] = useRecoilState(clubsState);
+  const setClubs = useSetRecoilState(clubsState);
 
-  const { isLoading, data } = useQuery(key, func, {
+  const { isLoading, data: clubs } = useQuery(key, func, {
     onError: (err) => console.log('query err', err),
     notifyOnChangeProps: ['isLoading', 'data'],
     refetchOnMount: false,
@@ -17,10 +17,10 @@ const useFetchingClubsData = (key, func) => {
 
   // fetcing이 끝난 후(data를 가져오면) setState 실행
   useEffect(() => {
-    setClubs(data);
-  }, [setClubs, data]);
+    setClubs(clubs);
+  }, [setClubs, clubs]);
 
-  return [isLoading, data];
+  return [isLoading, clubs];
 };
 
 export default useFetchingClubsData;
