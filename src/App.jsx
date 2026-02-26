@@ -1,7 +1,7 @@
-import { Helmet } from 'react-helmet';
-import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
-import Router from './Router';
+import { Helmet } from 'react-helmet'
+import { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
+import Router from './Router'
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
   }
-`;
+`
 
 const App = () => {
   return (
@@ -28,7 +28,7 @@ const App = () => {
       <GlobalStyle />
       <Router />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

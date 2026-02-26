@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import styled from 'styled-components';
-import ClubViews from './components/ClubViews';
-import Cover from './components/Cover';
-import Header from './components/Header';
-import Submission from './components/Submission';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import styled from 'styled-components'
+import ClubViews from './components/ClubViews'
+import Cover from './components/Cover'
+import Header from './components/Header'
+import Submission from './components/Submission'
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const Container = styled.div`
   @media screen and (max-width: 750px) {
     width: 100%;
   }
-`;
+`
 
 const Router = () => (
   <BrowserRouter>
@@ -28,6 +28,6 @@ const Router = () => (
       </Switch>
     </Container>
   </BrowserRouter>
-);
+)
 
-export default Router;
+export default Router
