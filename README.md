@@ -1,3 +1,7 @@
+<!-- [o] TODO: CRA to VITE -->
+<!-- [o] TODO: JS to TS -->
+<!-- [o] TODO: react-helmet(deprecated) > react-helmet-async -->
+
 # Find a football player game
 
 ## Stack
@@ -46,4 +50,4 @@
 
 [Who are ya!](https://playfootball.games/who-are-ya/world-cup)
 
-![game](src/imgs/game.PNG)
+![game](src/assets/imgs/game.PNG)
