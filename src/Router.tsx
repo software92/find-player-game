@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import ClubViews from './components/ClubViews'
 import Cover from './components/Cover'
@@ -18,16 +18,18 @@ const Container = styled.div`
 `
 
 const Router = () => (
-  <BrowserRouter>
-    <Header />
-    <Container>
-      <ClubViews />
-      <Switch>
-        <Route path='/submission' component={Submission} />
-        <Route path='/' component={Cover} />
-      </Switch>
-    </Container>
-  </BrowserRouter>
+  <>
+    <BrowserRouter>
+      <Header />
+      <Container>
+        <ClubViews />
+        <Routes>
+          <Route path='/submission' element={<Submission />} />
+          <Route path='/' element={<Cover />} />
+        </Routes>
+      </Container>
+    </BrowserRouter>
+  </>
 )
 
 export default Router

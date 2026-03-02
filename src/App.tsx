@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
 import Router from './Router'
