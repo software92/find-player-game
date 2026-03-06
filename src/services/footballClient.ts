@@ -1,0 +1,25 @@
+import axios from 'axios'
+
+const FOOTBALL_API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY
+const FOOTBALL_BASE_API_URL = 'https://v3.football.api-sports.io'
+
+export const footballApiInstance = axios.create({
+  baseURL: FOOTBALL_BASE_API_URL,
+  headers: {
+    'x-apisports-key': FOOTBALL_API_KEY,
+    accept: 'application/json`',
+  },
+})
+
+export const handleFetchError = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    console.error(
+      '❌ API Request Error:',
+      error.response?.data?.message || error.message,
+    )
+  } else if (error instanceof Error) {
+    console.error('❌ System Error:', error.message)
+  } else {
+    console.error('❌ Unknown Error:', error)
+  }
+}
