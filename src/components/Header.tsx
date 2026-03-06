@@ -41,10 +41,10 @@ const Header = () => {
         <Text>
           {'original: '}
           <ReferenceLink
-            href='https://playfootball.games/who-are-ya/world-cup'
+            href='https://playfootball.games/who-are-ya/big-4/'
             target='_blank'
           >
-            https://playfootball.games/who-are-ya/world-cup
+            https://playfootball.games/who-are-ya/big-4/
           </ReferenceLink>
         </Text>
       </SubContainer>
