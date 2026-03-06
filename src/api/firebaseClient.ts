@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const FIREBASE_API_CONFIG = {
-  FIREBASE_API_BASE_URL: `https://real-time-db--find-player-default-rtdb.firebaseio.com`,
+  FIREBASE_API_BASE_URL: import.meta.env.VITE_FIREBASE_API_BASE_URL,
   FIREBASE_DB_NAME: '/football-squads',
 }
 
