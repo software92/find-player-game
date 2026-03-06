@@ -9,7 +9,7 @@ const DEFAULT_LEAGUE = {
   season: 2024, // 26년 기준 최신
 }
 
-const DB_PREFIX = 'FOOTBALL_SQUADS'
+const DB_PREFIX = 'football-squads'
 
 // TODO: leagueTableData를 사용해서 promise를 호출할 때 slice 제거
 // TODO: server를 기준으로 업데이트 시기 추후 설정(if문 및 관련 코드 제거)
