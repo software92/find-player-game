@@ -32,19 +32,23 @@ export const syncFirebase = async (): Promise<void> => {
     const totalTeamInfo = await Promise.all(
       leagueTableData.slice(0, 2).map(async ({ team }) => {
         const { players } = await fetchSquadData(team.id)
+        const removeEmptyName = team.name.replaceAll(' ', '-')
 
-        return [[team.name], { ...team, players }]
+        return [[removeEmptyName], { ...team, players }]
       }),
     )
 
     const totalTeamInfoToStore = Object.fromEntries(totalTeamInfo)
 
     // 2. Firebase Realtime Database에 저장
-    const dbName = `${DB_PREFIX}_${now}`
+    const dbName = `${DB_PREFIX}`
     const databaseRef = ref(database, dbName)
 
     const dataToStore = {
-      pl: totalTeamInfoToStore,
+      lastUpdate: now,
+      league: {
+        pl: totalTeamInfoToStore,
+      },
     }
 
     await set(databaseRef, dataToStore)
