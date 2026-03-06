@@ -1,7 +1,7 @@
 import { ref, set } from 'firebase/database'
+import { handleFetchError } from '../api'
+import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
-import { fetchLeagueTableData, fetchSquadData } from './footballApi'
-import { handleFetchError } from './footballClient'
 
 const LS_KEY = 'last_update'
 const DEFAULT_LEAGUE = {
@@ -53,7 +53,6 @@ export const syncFirebase = async (): Promise<void> => {
     localStorage.setItem(LS_KEY, now)
     console.log('API 데이터를 Firebase 데이터베이스에 등록했습니다.')
   } catch (error) {
-    // API 요청 에러와 Firebase 저장 에러를 모두 여기서 잡습니다.
     handleFetchError(error)
   }
 }

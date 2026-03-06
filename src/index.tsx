@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { RecoilRoot } from 'recoil'
 import { HelmetProvider } from 'react-helmet-async'
 import { StrictMode } from 'react'
-import { syncFirebase } from './services/syncFirebase'
+import { syncFirebase } from './services/syncService'
 
 const queryClient = new QueryClient()
 

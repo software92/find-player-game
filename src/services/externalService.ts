@@ -1,21 +1,14 @@
-import axios from 'axios'
 import { FOOTBAL_API_ENDPOINT } from '../constant/routes'
 import type {
   IGetLeagueTable,
   IGetTeamSquads,
   IGetTeamSquadsResponse,
   IResponse,
-} from '../types/api-football.types'
-import { footballApiInstance, handleFetchError } from './footballClient'
+} from '../types/api-external.types'
+import { footballApiInstance } from '../api/externalClient'
+import { handleFetchError } from '../api'
 
-// const fetchData = async (url, params) => {
-//   try {
-//     const response = await footballApiInstance.get(url, { params })
-//     return response.data
-//   } catch (error) {
-//     handleFetchError(error)
-//   }
-// }
+// external api -> firebase
 
 // API 요청 분리(football api)
 // 팀의 선수 정보 가져오기
