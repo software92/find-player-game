@@ -1,15 +1,20 @@
-import { ref, set } from 'firebase/database'
+// [o] TODO: 변경된 sync함수 실행 후 아래 주석 데이터 구조와 비교
+import { ref, serverTimestamp, set, update } from 'firebase/database'
 import { handleFetchError } from '../api'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
 
-const LS_KEY = 'last_update'
 const DEFAULT_LEAGUE = {
   league: 39, // pl
   season: 2024, // 26년 기준 최신
 }
 
-const DB_PREFIX = 'football-squads'
+// temp keys
+const LS_KEY = 'last_update'
+const DB_DEFAULT_DATA = {
+  league: 39,
+}
+const DB_METADATA_PATH = `metadata`
 
 // TODO: leagueTableData를 사용해서 promise를 호출할 때 slice 제거
 // TODO: server를 기준으로 업데이트 시기 추후 설정(if문 및 관련 코드 제거)
@@ -29,26 +34,33 @@ export const syncFirebase = async (): Promise<void> => {
     if (!leagueTableData || leagueTableData.length === 0)
       throw new Error('리그 데이터를 가져오지 못했습니다.')
 
-    const totalTeamInfo = await Promise.all(
-      leagueTableData.slice(0, 2).map(async ({ team }) => {
-        const { players } = await fetchSquadData(team.id)
+    const teamsObj: Record<number, any> = {}
+    const squadsObj: Record<number, any> = {}
 
-        return { ...team, players }
-      }),
-    )
+    const squadPromises = leagueTableData.slice(0, 2).map(async ({ team }) => {
+      teamsObj[team.id] = team
+
+      const squadData = await fetchSquadData(team.id)
+      return { players: squadData.players, teamId: team.id }
+    })
+
+    const totalTeamSquads = await Promise.all(squadPromises)
+
+    if (!totalTeamSquads || totalTeamSquads.length === 0)
+      throw new Error('리그 데이터를 가져오지 못했습니다.')
+
+    totalTeamSquads.forEach(({ teamId, players }) => {
+      squadsObj[teamId] = players
+    })
 
     // 2. Firebase Realtime Database에 저장
-    const dbName = `${DB_PREFIX}`
-    const databaseRef = ref(database, dbName)
-
     const dataToStore = {
-      lastUpdate: now,
-      league: {
-        pl: totalTeamInfo,
-      },
+      [`${DB_DEFAULT_DATA.league}/teams`]: teamsObj,
+      [`${DB_DEFAULT_DATA.league}/squads`]: squadsObj,
+      [`${DB_METADATA_PATH}/lastUpdate`]: serverTimestamp(),
     }
 
-    await set(databaseRef, dataToStore)
+    await update(ref(database), dataToStore)
 
     localStorage.setItem(LS_KEY, now)
     console.log('API 데이터를 Firebase 데이터베이스에 등록했습니다.')
