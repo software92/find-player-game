@@ -1,43 +1,67 @@
 import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 import { useSetRecoilState } from 'recoil'
 import { squadsState } from '../atom'
+import { fetchSquads } from '../services/clientService'
+import { useQuery } from '@tanstack/react-query'
 
-const useFetchingSquadData = (key, func, clubImage, id) => {
-  const [isShow, setShow] = useState(false)
-  const setSquads = useSetRecoilState(squadsState)
+const STATIC_DATA_OPTIONS = {
+  staleTime: 1000 * 60 * 30, // 30분
+  gcTime: 1000 * 60 * 30, // staleTime보다 같거나 길게 설정
+  refetchOnWindowFocus: false, // 창 포커스 시 재요청 방지
+  refetchOnMount: false, // 컴포넌트 마운트 시 재요청 방지
+  refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
+}
 
-  const { isLoading: isClubSquadLoading, data: squad } = useQuery(
-    key,
-    () => func,
-    {
-      onError: err => console.log('club squad err', err),
-      notifyOnChangeProps: ['isLoading', 'data'],
-      refetchOnMount: false,
-      select: data => data.squad,
-      staleTime: Infinity,
-      cacheTime: Infinity,
-    },
-  )
-  const handleMouseEvent = bool => () => {
-    if (isClubSquadLoading) return
-    setShow(bool)
-  }
+const queryKeys = (leagueId: number) => [leagueId, 'total', 'squads']
 
-  useEffect(() => {
-    if (!!squad) {
-      setSquads(prev => [
-        {
-          id,
-          clubImage,
-          squad,
-        },
-        ...prev,
-      ])
-    }
-  }, [id, clubImage, setSquads, squad])
+const useFetchingSquadData = (leagueId: number) => {
+  // const [isShow, setShow] = useState(false)
+  // const setSquads = useSetRecoilState(squadsState)
 
-  return [isClubSquadLoading, squad, handleMouseEvent, isShow]
+  const {
+    isPending,
+    error,
+    data: squads,
+  } = useQuery({
+    queryKey: queryKeys(leagueId),
+    queryFn: () => fetchSquads(),
+    ...STATIC_DATA_OPTIONS,
+  })
+
+  return { isPending, error, squads }
+
+  // const {
+  //   isPending,
+  //   error,
+  //   data: squads,
+  //   refetch,
+  // } = useQuery({
+  //   queryKey: [leagueId, 'total', 'squads'],
+  //   queryFn: () => fetchSquads(),
+  //   ...STATIC_DATA_OPTIONS,
+  // })
+
+  // return { isPending, error, squads, refetch }
+
+  // const handleMouseEvent = bool => () => {
+  //   if (isClubSquadLoading) return
+  //   setShow(bool)
+  // }
+
+  // useEffect(() => {
+  //   if (!!squad) {
+  //     setSquads(prev => [
+  //       {
+  //         id,
+  //         clubImage,
+  //         squad,
+  //       },
+  //       ...prev,
+  //     ])
+  //   }
+  // }, [id, clubImage, setSquads, squad])
+
+  // return [isClubSquadLoading, squad, handleMouseEvent, isShow]
 }
 
 export default useFetchingSquadData
