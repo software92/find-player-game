@@ -6,7 +6,7 @@ export const getClubss = async (): Promise<ITeamDetail[]> => {
   try {
     const response = await firebaseApiInstance.get<{
       [key: string]: ITeamDetail
-    }>(getURLPath(routes.PL_TABLE))
+    }>(getURLPath(routes.LEAGUE_TABLE(39))) // 39: PL
 
     if (!response.data) return []
 
