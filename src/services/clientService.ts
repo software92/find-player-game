@@ -1,12 +1,14 @@
-import { firebaseApiInstance, getURLPath, routes } from '../api/firebaseClient'
+import { firebaseApiInstance } from '../api/firebaseClient'
+import { FIREBASE_API_ENDPOINT } from '../constant'
 import type { ITeamDetail } from '../types/api-firebase.types'
+import { getFirebaseURLPath } from '../utils/path'
 
 // firebase -> client
 export const getClubss = async (): Promise<ITeamDetail[]> => {
   try {
     const response = await firebaseApiInstance.get<{
       [key: string]: ITeamDetail
-    }>(getURLPath(routes.LEAGUE_TABLE(39))) // 39: PL
+    }>(getFirebaseURLPath(FIREBASE_API_ENDPOINT.LEAGUE_TABLE(39))) // 39: PL
 
     if (!response.data) return []
 

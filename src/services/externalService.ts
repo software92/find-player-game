@@ -1,4 +1,4 @@
-import { FOOTBAL_API_ENDPOINT } from '../constant/routes'
+import { FOOTBAL_API_ENDPOINT } from '../constant/footballRoutes'
 import type {
   IGetLeagueTable,
   IGetTeamSquads,

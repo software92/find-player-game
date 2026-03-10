@@ -1,20 +1,13 @@
 // [o] TODO: 변경된 sync함수 실행 후 아래 주석 데이터 구조와 비교
-import { ref, serverTimestamp, set, update } from 'firebase/database'
+import { ref, serverTimestamp, update } from 'firebase/database'
 import { handleFetchError } from '../api'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
-
-const DEFAULT_LEAGUE = {
-  league: 39, // pl
-  season: 2024, // 26년 기준 최신
-}
+import { DB_DEFAULT_DATA, DB_METADATA_PATH, DEFAULT_LEAGUE } from '../constant'
+import type { IPlayer, ITeam1 } from '../types/api-external.types'
 
 // temp keys
 const LS_KEY = 'last_update'
-const DB_DEFAULT_DATA = {
-  league: 39,
-}
-const DB_METADATA_PATH = `metadata`
 
 // TODO: leagueTableData를 사용해서 promise를 호출할 때 slice 제거
 // TODO: server를 기준으로 업데이트 시기 추후 설정(if문 및 관련 코드 제거)
@@ -34,8 +27,8 @@ export const syncFirebase = async (): Promise<void> => {
     if (!leagueTableData || leagueTableData.length === 0)
       throw new Error('리그 데이터를 가져오지 못했습니다.')
 
-    const teamsObj: Record<number, any> = {}
-    const squadsObj: Record<number, any> = {}
+    const teamsObj: Record<number, ITeam1> = {}
+    const squadsObj: Record<number, IPlayer[]> = {}
 
     const squadPromises = leagueTableData.slice(0, 2).map(async ({ team }) => {
       teamsObj[team.id] = team
