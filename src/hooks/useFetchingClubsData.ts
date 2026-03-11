@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil'
 import { clubsState } from '../atom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchClubs } from '../services/clientService'
+import type { ITeamDetail } from '../types'
 
 const STATIC_DATA_OPTIONS = {
   staleTime: 1000 * 60 * 30, // 30분
@@ -12,7 +13,7 @@ const STATIC_DATA_OPTIONS = {
   refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
 }
 
-const queryKeys = (leagueId: number) => [leagueId, 'total', 'clubs']
+const queryKeys = (leagueId: number) => [leagueId, 'total', 'clubs'] as const
 
 const useFetchingClubsData = (leagueId: number) => {
   // const setClubs = useSetRecoilState(clubsState)
@@ -21,32 +22,18 @@ const useFetchingClubsData = (leagueId: number) => {
     isPending,
     error,
     data: clubs,
-    refetch,
-  } = useQuery({
+  } = useQuery<
+    ITeamDetail[],
+    Error,
+    ITeamDetail[],
+    readonly [number, 'total', 'clubs']
+  >({
     queryKey: queryKeys(leagueId),
-    queryFn: () => fetchClubs(),
+    queryFn: () => fetchClubs({}),
     ...STATIC_DATA_OPTIONS,
   })
-  // const { isLoading, data: clubs } = useQuery(key, func, {
-  //   onError: (err) => console.log('query err', err),
-  //   notifyOnChangeProps: ['isLoading', 'data'],
-  //   refetchOnMount: false,
-  //   select: (data) => data.table.slice(0, 5),
-  //   staleTime: Infinity,
-  //   cacheTime: Infinity,
-  // });
 
-  // if (isPending) return 'loading...'
-  // if (error) return error.message
-
-  return { isPending, error, clubs, refetch }
-
-  // fetcing이 끝난 후(data를 가져오면) setState 실행
-  // useEffect(() => {
-  //   setClubs(clubs)
-  // }, [setClubs, clubs])
-
-  // return [isLoading, clubs];
+  return { isPending, error, clubs }
 }
 
 export default useFetchingClubsData

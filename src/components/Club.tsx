@@ -1,38 +1,32 @@
 import styled from 'styled-components'
-// import { getSquad } from '../api';
-import useFetchingSquadData from '../hooks/useFetchingSquadData'
 import ClubSquadModal from './ClubSquadModal'
+import { useState } from 'react'
+import type { ITeamDetail } from '../types'
 
 const Container = styled.div`
   position: relative;
-  font-size: 15px;
   text-align: center;
-  &:hover {
-    cursor: ${props => (props.isClubSquadLoading ? 'wait' : 'pointer')};
-  }
+  padding: 5px;
 `
 
 const Emblem = styled.img`
-  width: 70%;
+  width: 100%;
   z-index: 0;
-  margin-top: 10px;
+  aspect-ratio: 1 / 1;
 `
 
-const Club = ({ clubImage, clubName, id }) => {
-  return <div>Club component</div>
+const Club = ({ logo, name, id }: ITeamDetail) => {
+  const [isHover, setIsHover] = useState(false)
 
-  const [isClubSquadLoading, squad, handleMouseEvent, isShow] =
-    useFetchingSquadData([clubName, 'squads'], getSquad(id))
+  if (!logo || !name) return null
+
   return (
     <Container
-      isClubSquadLoading={isClubSquadLoading}
-      onMouseOver={handleMouseEvent(true)}
-      onMouseOut={handleMouseEvent(false)}
+      onMouseOver={() => setIsHover(true)}
+      onMouseOut={() => setIsHover(false)}
     >
-      <Emblem src={clubImage} />
-      {isShow && (
-        <ClubSquadModal isClubSquadLoading={isClubSquadLoading} squad={squad} />
-      )}
+      <Emblem src={logo} alt={name} />
+      {isHover && <ClubSquadModal id={id} />}
     </Container>
   )
 }
