@@ -1,37 +1,8 @@
-import { createBrowserRouter } from 'react-router-dom'
-import Cover from './components/Cover'
-import Submission from './components/Submission'
-import RootLayout from './components/layout/RootLayout'
+import { RouterProvider } from 'react-router-dom'
+import router from './routes/router'
 
-const browserRoute = [
-  {
-    path: '/',
-    element: <RootLayout />,
-    loader: () => {},
-    children: [
-      {
-        index: true,
-        element: <Cover />,
-      },
-      {
-        path: '/submission',
-        element: <Submission />,
-      },
-    ],
-  },
-]
-
-const browserRouter = createBrowserRouter(browserRoute)
-
-{
-  /* <Header />
-<Container>
-  <ClubViews />
-  <Routes>
-    <Route path='/submission' element={<Submission />} />
-    <Route path='/' element={<Cover />} />
-  </Routes>
-</Container> */
+const BrowserRouter = () => {
+  return <RouterProvider router={router} />
 }
 
-export default browserRouter
+export default BrowserRouter

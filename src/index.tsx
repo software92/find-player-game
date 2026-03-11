@@ -1,11 +1,10 @@
 import { createRoot } from 'react-dom/client'
-import App from './App'
 import { RecoilRoot } from 'recoil'
 import { HelmetProvider } from 'react-helmet-async'
 import { syncFirebase } from './services/syncService'
 import { StrictMode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import BrowserRouter from './App'
+import BrowserRouter from './BrowserRouter'
 
 const queryClient = new QueryClient()
 
