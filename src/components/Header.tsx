@@ -36,7 +36,7 @@ const HomeLink = styled(Link)`
 const Header = () => {
   return (
     <Container>
-      <HomeLink to='/'>Find a your player !</HomeLink>
+      <HomeLink to='/'>Find Football Player</HomeLink>
       <SubContainer>
         <Text>
           {'original: '}

@@ -13,7 +13,7 @@ const Container = styled.div`
   gap: 15px;
   margin: 0 auto;
   padding: 0 20px;
-  @media screen and (max-width: 750px) {
+  ${({ theme }) => theme.media.tablet} {
     width: 100%;
   }
 `
@@ -38,7 +38,7 @@ function RootLayout() {
   return (
     <>
       <Helmet>
-        <title>Find a football player game</title>
+        <title>Find Football Player</title>
       </Helmet>
       <Header />
       <GlobalStyle />
