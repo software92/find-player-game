@@ -1,3 +1,4 @@
+// request: teams in league
 export interface IGetLeagueTable {
   get: string
   parameters: IGetLeagueTableParameters
@@ -26,9 +27,7 @@ export interface ITeam1 {
   logo: string
 }
 
-// 팀의 선수 목록 가져오기
-// get("https://v3.football.api-sports.io/players/squads?team=${team_id}"); // MU: 33
-
+// request: squad
 export interface IGetTeamSquads {
   get: string
   parameters: IGetTeamSquadsParameters
@@ -58,8 +57,8 @@ export interface IPlayer {
   name: string
   age: number
   number: number
-  position: string
   photo: string
+  position: 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Attacker'
 }
 
 // commons
