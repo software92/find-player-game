@@ -75,7 +75,7 @@ const ClubSquadModal = ({ id }: { id: number }) => {
     )
 
   if (error || !squad || squad?.length === 0) {
-    console.log('현재 선수 목록을 가져올 수 없습니다', error)
+    console.error('현재 선수 목록을 가져올 수 없습니다', error)
     return (
       <Squad>
         <Loader>

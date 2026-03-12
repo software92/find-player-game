@@ -9,10 +9,10 @@ import { Helmet } from 'react-helmet-async'
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  width: 750px;
-  max-width: 1650px;
+  max-width: 1280px;
   gap: 15px;
   margin: 0 auto;
+  padding: 0 20px;
   @media screen and (max-width: 750px) {
     width: 100%;
   }
