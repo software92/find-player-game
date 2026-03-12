@@ -1,10 +1,10 @@
 import type { DefaultTheme } from 'styled-components'
 
-const breakpoints = {
+export const breakpoints = {
   mobile: '640px',
   tablet: '768px',
   desktop: '1024px',
-}
+} as const
 
 export const theme: DefaultTheme = {
   media: {
