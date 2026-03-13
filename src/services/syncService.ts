@@ -1,10 +1,13 @@
-// [o] TODO: 변경된 sync함수 실행 후 아래 주석 데이터 구조와 비교
+// api-football -> firebase data 연결
 import { ref, serverTimestamp, update } from 'firebase/database'
 import { handleFetchError } from '../api'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
-import { DB_DEFAULT_DATA, DB_METADATA_PATH, DEFAULT_LEAGUE } from '../constant'
-import type { IPlayer, ITeam1 } from '../types/api-external.types'
+import { DEFAULT_LEAGUE } from '../constant'
+import type { ITeam1 } from '../types/api-external.types'
+import { sleep } from '../utils/timer'
+
+type IFirebaseObject = Record<string, any>
 
 // temp keys
 const LS_KEY = 'last_update'
@@ -21,42 +24,34 @@ export const syncFirebase = async (): Promise<void> => {
   }
 
   try {
-    // 1. API 데이터 가져오기
     const leagueTableData = await fetchLeagueTableData(DEFAULT_LEAGUE)
 
     if (!leagueTableData || leagueTableData.length === 0)
       throw new Error('리그 데이터를 가져오지 못했습니다.')
 
-    const teamsObj: Record<number, ITeam1> = {}
-    const squadsObj: Record<number, IPlayer[]> = {}
+    const updates: IFirebaseObject = {}
 
-    const squadPromises = leagueTableData.slice(0, 2).map(async ({ team }) => {
-      teamsObj[team.id] = team
+    // temp
+    // const tableData = leagueTableData.slice(0,5)
 
-      const squadData = await fetchSquadData(team.id)
-      return { players: squadData.players, teamId: team.id }
-    })
+    updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
+      ({ team }) => team.id,
+    )
+    updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
 
-    const totalTeamSquads = await Promise.all(squadPromises)
-
-    if (!totalTeamSquads || totalTeamSquads.length === 0)
-      throw new Error('리그 데이터를 가져오지 못했습니다.')
-
-    totalTeamSquads.forEach(({ teamId, players }) => {
-      squadsObj[teamId] = players
-    })
-
-    // 2. Firebase Realtime Database에 저장
-    const dataToStore = {
-      [`${DB_DEFAULT_DATA.league}/teams`]: teamsObj,
-      [`${DB_DEFAULT_DATA.league}/squads`]: squadsObj,
-      [`${DB_METADATA_PATH}/lastUpdate`]: serverTimestamp(),
+    for (const { team } of leagueTableData) {
+      await syncTeam(team, updates)
+      await sleep(5000)
     }
+
+    const dataToStore = { ...updates }
 
     await update(ref(database), dataToStore)
 
     localStorage.setItem(LS_KEY, now)
-    console.log('API 데이터를 Firebase 데이터베이스에 등록했습니다.')
+    console.log(
+      'Football API 데이터를 Firebase 데이터베이스에 업데이트 했습니다.',
+    )
   } catch (error) {
     handleFetchError(error)
   }
@@ -67,4 +62,38 @@ const getNowYearNMonth = (): string => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   return `${year}-${month}`
+}
+
+const syncTeam = async (
+  team: ITeam1,
+  updates: IFirebaseObject,
+): Promise<void> => {
+  updates[`teams/${team.id}/info`] = { ...team }
+  updates[`teams/${team.id}/updatedAt`] = serverTimestamp()
+
+  try {
+    const squadData = await fetchSquadData(team.id)
+    const players = squadData?.players || []
+
+    if (players.length === 0) {
+      console.warn(`${team.name} 선수 데이터가 없습니다`)
+      updates[`teams/${team.id}/playerIds`] = []
+    } else {
+      players.forEach(player => {
+        const playerAddedTeamInfo = {
+          ...player,
+          teamId: team.id,
+          teamLogo: team.logo,
+        }
+
+        updates[`players/${player.id}/info`] = playerAddedTeamInfo
+        updates[`players/${player.id}/updatedAt`] = serverTimestamp()
+      })
+
+      updates[`teams/${team.id}/playerIds`] = players.map(player => player.id)
+    }
+  } catch (error) {
+    console.error(`${team.name} 데이터를 가져올 수 없습니다`)
+    updates[`teams/${team.id}/playerIds`] = []
+  }
 }
