@@ -11,6 +11,7 @@ const ClubList = styled.div<IClubList>`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  gap: 10px;
   max-width: 250px;
   height: auto;
   ${props =>
@@ -44,6 +45,8 @@ const ClubViews = () => {
   const { isPending, error, clubs } = useFetchingClubsData(
     DB_DEFAULT_DATA.league,
   )
+
+  console.log('clubs', clubs)
 
   if (error) {
     console.error(`팀 정보를 가져올 수 없습니다:`, error)

@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 import ClubSquadModal from './ClubSquadModal'
 import { useState } from 'react'
-import type { ITeamDetail } from '../types'
+import type { IFirebaseTeamDetail } from '../types'
+import useDebouncedValue from '../hooks/useDebouncedValue'
 
-const Container = styled.div`
+const Container = styled.div<{ $isHover: boolean }>`
   position: relative;
   text-align: center;
   padding: 5px;
+  cursor: ${props => (props.$isHover ? 'pointer' : 'pointer')};
 `
 
 const Emblem = styled.img`
@@ -15,18 +17,18 @@ const Emblem = styled.img`
   aspect-ratio: 1 / 1;
 `
 
-const Club = ({ logo, name, id }: ITeamDetail) => {
+const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [isHover, setIsHover] = useState(false)
-
-  if (!logo || !name) return null
+  const onModal = useDebouncedValue(isHover, 500)
 
   return (
     <Container
+      $isHover={isHover}
       onMouseOver={() => setIsHover(true)}
       onMouseOut={() => setIsHover(false)}
     >
       <Emblem src={logo} alt={name} />
-      {isHover && <ClubSquadModal id={id} />}
+      {onModal && isHover && <ClubSquadModal id={id} />}
     </Container>
   )
 }
