@@ -2,19 +2,19 @@ import { createBrowserRouter } from 'react-router-dom'
 import Cover from '../components/Cover'
 import Submission from '../components/Submission'
 import RootLayout from '../components/layout/RootLayout'
+import routerPath from '../constant/routerPath'
 
 const routes = [
   {
-    path: '/',
+    path: routerPath.HOME,
     element: <RootLayout />,
-    loader: () => {},
     children: [
       {
         index: true,
         element: <Cover />,
       },
       {
-        path: '/submission',
+        path: routerPath.SUBMISSION,
         element: <Submission />,
       },
     ],
