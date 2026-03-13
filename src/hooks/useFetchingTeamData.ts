@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { clubsState } from '../atom'
 import { useQuery } from '@tanstack/react-query'
-import { fetchClubs } from '../services/clientService'
+import { fetchTeam } from '../services/clientService'
 import type { IFirebaseTeamDetail } from '../types'
 
 const STATIC_DATA_OPTIONS = {
@@ -13,27 +13,23 @@ const STATIC_DATA_OPTIONS = {
   refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
 }
 
-const queryKeys = (leagueId: number) => [leagueId, 'total', 'clubs'] as const
+const queryKeys = (teamId: number) => [teamId, 'total', 'clubs'] as const
 
-const useFetchingClubsData = (leagueId: number) => {
+// 단일 팀 정보 조회
+const useFetchingTeamData = (teamId: number) => {
   // const setClubs = useSetRecoilState(clubsState)
 
   const {
     isPending,
     error,
-    data: clubs,
-  } = useQuery<
-    IFirebaseTeamDetail[],
-    Error,
-    IFirebaseTeamDetail[],
-    readonly [number, 'total', 'clubs']
-  >({
-    queryKey: queryKeys(leagueId),
-    queryFn: () => fetchClubs({}),
+    data: team,
+  } = useQuery<IFirebaseTeamDetail, Error, IFirebaseTeamDetail>({
+    queryKey: queryKeys(teamId),
+    queryFn: () => fetchTeam(teamId),
     ...STATIC_DATA_OPTIONS,
   })
 
-  return { isPending, error, clubs }
+  return { isPending, error, team }
 }
 
-export default useFetchingClubsData
+export default useFetchingTeamData
