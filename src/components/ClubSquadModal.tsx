@@ -1,13 +1,15 @@
 import styled from 'styled-components'
 import useFetchingTeamSquadData from '../hooks/useFetchingTeamSquadData'
 import { DB_DEFAULT_DATA } from '../constant'
+import { useEffect, useRef } from 'react'
 
-const Squad = styled.ul`
+const PlayerList = styled.ul`
   position: absolute;
   top: 0;
-  right: -210px;
+  left: 100%;
   width: 230px;
   max-height: 300px;
+  height: fit-content;
   z-index: 3;
   border: 2px solid grey;
   display: flex;
@@ -15,11 +17,14 @@ const Squad = styled.ul`
   border-radius: 5px;
   overflow-y: auto;
 `
-const PlayerInfo = styled.li`
+const PlayerRow = styled.li`
   line-height: 30px;
   text-align: left;
   color: inherit;
   background-color: #ebebeb;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: clip;
   &:nth-child(2n) {
     background-color: #c0c0c0;
   }
@@ -59,41 +64,60 @@ const Span = styled.span`
 `
 
 // 클럽의 등록된 선수를 보여주는 Modal
-const ClubSquadModal = ({ id }: { id: number }) => {
+const ClubSquadModal = ({
+  id,
+  parentRef,
+}: {
+  id: number
+  parentRef: React.RefObject<HTMLImageElement>
+}) => {
   const { isPending, error, squad } = useFetchingTeamSquadData(
     DB_DEFAULT_DATA.league,
     id,
   )
+  const listRef = useRef<HTMLUListElement>(null)
 
-  if (isPending)
-    return (
-      <Squad>
-        <Loader>
-          <Span>Loading...</Span>
-        </Loader>
-      </Squad>
-    )
+  useEffect(() => {
+    if (!listRef.current || !parentRef.current || isPending) return
 
-  if (error || !squad || squad?.length === 0) {
-    console.error('현재 선수 목록을 가져올 수 없습니다', error)
-    return (
-      <Squad>
-        <Loader>
-          <span>현재 선수 목록을 가져올 수 없습니다</span>
-        </Loader>
-      </Squad>
-    )
-  }
+    const { y } = parentRef.current.getBoundingClientRect()
+    const playListHeight = listRef.current.clientHeight
+    const screenHeight = window.innerHeight
+
+    const isListToTransfer = !(playListHeight < screenHeight - y)
+
+    listRef.current.style.transform = isListToTransfer
+      ? 'translateY(-80%)'
+      : 'none'
+  }, [squad, isPending, parentRef])
 
   return (
-    <Squad>
-      {squad.map((player, idx) => (
-        <PlayerInfo key={idx}>
-          <Name>{player.name}</Name>
-        </PlayerInfo>
-      ))}
-    </Squad>
+    <PlayerList ref={listRef}>
+      {isPending ? (
+        <Message message='Loading...' />
+      ) : error || !squad?.length ? (
+        <Message message='현재 선수 목록을 가져올 수 없습니다' />
+      ) : (
+        squad.map((player, idx) => <Player key={idx} name={player.name} />)
+      )}
+    </PlayerList>
   )
 }
 
 export default ClubSquadModal
+
+function Message({ message }: { message: string; isLoading?: boolean }) {
+  return (
+    <Loader>
+      <span>{message}</span>
+    </Loader>
+  )
+}
+
+function Player({ name }: { name: string }) {
+  return (
+    <PlayerRow>
+      <Name>{name}</Name>
+    </PlayerRow>
+  )
+}

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import ClubSquadModal from './ClubSquadModal'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
 
@@ -20,15 +20,15 @@ const Emblem = styled.img`
 const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [isHover, setIsHover] = useState(false)
   const onModal = useDebouncedValue(isHover, 500)
-
+  const parentRef = useRef<HTMLImageElement>(null)
   return (
     <Container
       $isHover={isHover}
       onMouseOver={() => setIsHover(true)}
       onMouseOut={() => setIsHover(false)}
     >
-      <Emblem src={logo} alt={name} />
-      {onModal && isHover && <ClubSquadModal id={id} />}
+      <Emblem src={logo} alt={name} ref={parentRef} />
+      {onModal && isHover && <ClubSquadModal id={id} parentRef={parentRef} />}
     </Container>
   )
 }
