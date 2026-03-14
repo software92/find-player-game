@@ -8,27 +8,36 @@ const Container = styled.div<{ $isHover: boolean }>`
   position: relative;
   text-align: center;
   padding: 5px;
-  cursor: ${props => (props.$isHover ? 'pointer' : 'pointer')};
+  cursor: ${props => (props.$isHover ? 'pointer' : 'auto')};
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    z-index: 5;
+  }
 `
 
 const Emblem = styled.img`
   width: 100%;
-  z-index: 0;
   aspect-ratio: 1 / 1;
+  display: block; /* 하단 여백 제거 */
 `
 
 const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [isHover, setIsHover] = useState(false)
-  const onModal = useDebouncedValue(isHover, 500)
+  const onLazyModal = useDebouncedValue(isHover, 300)
   const parentRef = useRef<HTMLImageElement>(null)
+
   return (
     <Container
       $isHover={isHover}
-      onMouseOver={() => setIsHover(true)}
-      onMouseOut={() => setIsHover(false)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <Emblem src={logo} alt={name} ref={parentRef} />
-      {onModal && isHover && <ClubSquadModal id={id} parentRef={parentRef} />}
+      {onLazyModal && isHover && (
+        <ClubSquadModal id={id} parentRef={parentRef} />
+      )}
     </Container>
   )
 }

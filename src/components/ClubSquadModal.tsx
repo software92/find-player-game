@@ -1,7 +1,11 @@
 import styled from 'styled-components'
-import useFetchingTeamSquadData from '../hooks/useFetchingTeamSquadData'
-import { DB_DEFAULT_DATA } from '../constant'
+import useFetchingTeamSquadData from '../hooks/useFetchingTeamPlayersData'
 import { useEffect, useRef } from 'react'
+
+interface IClubSquadModalProps {
+  id: number
+  parentRef: React.RefObject<HTMLImageElement>
+}
 
 const PlayerList = styled.ul`
   position: absolute;
@@ -22,9 +26,7 @@ const PlayerRow = styled.li`
   text-align: left;
   color: inherit;
   background-color: #ebebeb;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: clip;
+
   &:nth-child(2n) {
     background-color: #c0c0c0;
   }
@@ -38,6 +40,10 @@ const Name = styled.span`
   text-transform: Uppercase;
   font-weight: bold;
   text-shadow: 1px 1px 5px black;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const Loader = styled.li`
@@ -56,49 +62,38 @@ const Loader = styled.li`
     margin-left: 10px;
   }
 `
-const Span = styled.span`
-  margin: auto 0;
-  text-transform: Uppercase;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px gray;
-`
 
 // 클럽의 등록된 선수를 보여주는 Modal
-const ClubSquadModal = ({
-  id,
-  parentRef,
-}: {
-  id: number
-  parentRef: React.RefObject<HTMLImageElement>
-}) => {
-  const { isPending, error, squad } = useFetchingTeamSquadData(
-    DB_DEFAULT_DATA.league,
-    id,
-  )
+const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
+  const {
+    isPending,
+    error,
+    playerInTeam: players,
+  } = useFetchingTeamSquadData(id)
   const listRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
     if (!listRef.current || !parentRef.current || isPending) return
 
-    const { y } = parentRef.current.getBoundingClientRect()
+    const { y, bottom } = parentRef.current.getBoundingClientRect()
     const playListHeight = listRef.current.clientHeight
     const screenHeight = window.innerHeight
 
-    const isListToTransfer = !(playListHeight < screenHeight - y)
+    const isListToTransfer = screenHeight - bottom < playListHeight
 
     listRef.current.style.transform = isListToTransfer
       ? 'translateY(-80%)'
       : 'none'
-  }, [squad, isPending, parentRef])
+  }, [players, isPending])
 
   return (
     <PlayerList ref={listRef}>
       {isPending ? (
         <Message message='Loading...' />
-      ) : error || !squad?.length ? (
+      ) : error || !players?.length ? (
         <Message message='현재 선수 목록을 가져올 수 없습니다' />
       ) : (
-        squad.map((player, idx) => <Player key={idx} name={player.name} />)
+        players.map(player => <Player key={player.id} name={player.name} />)
       )}
     </PlayerList>
   )
