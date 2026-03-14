@@ -1,7 +1,7 @@
 // firebase -> client
 import { firebaseApiInstance } from '../api/firebaseClient'
 import { DB_DEFAULT_DATA, FIREBASE_API_ENDPOINT } from '../constant'
-import type { IPlayer, IFirebaseTeamDetail } from '../types'
+import type { IFirebaseTeamDetail } from '../types'
 import { getFirebaseURLPath, type FirebaseReturnPath } from '../utils/path'
 
 // tanstack query와 함께 사용할 때, 데이터를 가져오는 fetch 함수에서 try-catch를 사용하면
@@ -38,16 +38,3 @@ export const fetchTeamIdsInLeague = async (
 
   return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
 }
-
-// // total club`s squad in league
-// export const fetchSquads = async ({
-//   leagueId = DB_DEFAULT_DATA.league,
-// }: IFetchCommon): Promise<IPlayer[][]> => {
-//   const url = FIREBASE_API_ENDPOINT.ALL_SQUAD_IN_LEAGUE(leagueId)
-
-//   const data = await fetchFirebaseData<Record<number, IPlayer[]>>(
-//     getFirebaseURLPath(url),
-//   )
-
-//   return data ? Object.values(data) : []
-// }

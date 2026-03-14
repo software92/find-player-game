@@ -1,3 +1,10 @@
+import type { IPlayer } from './api-external.types'
+
+export interface IFirebasePlayer extends IPlayer {
+  teamId: number
+  teamLogo: string
+  leagueId: number
+}
 export interface IFirebaseTeamDetail {
   id: number
   name: string
@@ -6,6 +13,8 @@ export interface IFirebaseTeamDetail {
   founded: number
   logo: string
   national: boolean
+
+  leagueId: number
 }
 export interface IFirebaseTeamPlayerIds {
   playerIds: number[]

@@ -1,10 +1,11 @@
+// [test - const tableData = leagueTableData.slice(0, 2)]
 // api-football -> firebase data 연결
 import { ref, serverTimestamp, update } from 'firebase/database'
 import { handleFetchError } from '../api'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
 import { DEFAULT_LEAGUE } from '../constant'
-import type { ITeam1 } from '../types/api-external.types'
+import type { IFirebasePlayer, ITeam1 } from '../types'
 import { sleep } from '../utils/timer'
 
 type IFirebaseObject = Record<string, any>
@@ -32,14 +33,15 @@ export const syncFirebase = async (): Promise<void> => {
     const updates: IFirebaseObject = {}
 
     // temp
-    // const tableData = leagueTableData.slice(0,5)
+    const tableData = leagueTableData.slice(0, 2)
 
     updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
       ({ team }) => team.id,
     )
     updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
 
-    for (const { team } of leagueTableData) {
+    // for (const { team } of leagueTableData) {
+    for (const { team } of tableData) {
       await syncTeam(team, updates)
       await sleep(5000)
     }
@@ -70,7 +72,6 @@ const syncTeam = async (
 ): Promise<void> => {
   updates[`teams/${team.id}/info`] = { ...team }
   updates[`teams/${team.id}/updatedAt`] = serverTimestamp()
-
   try {
     const squadData = await fetchSquadData(team.id)
     const players = squadData?.players || []
@@ -78,22 +79,26 @@ const syncTeam = async (
     if (players.length === 0) {
       console.warn(`${team.name} 선수 데이터가 없습니다`)
       updates[`teams/${team.id}/playerIds`] = []
+      updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = []
     } else {
       players.forEach(player => {
-        const playerAddedTeamInfo = {
+        const playerAddedTeamInfo: IFirebasePlayer = {
           ...player,
           teamId: team.id,
           teamLogo: team.logo,
+          leagueId: DEFAULT_LEAGUE.league,
         }
 
         updates[`players/${player.id}/info`] = playerAddedTeamInfo
         updates[`players/${player.id}/updatedAt`] = serverTimestamp()
       })
-
-      updates[`teams/${team.id}/playerIds`] = players.map(player => player.id)
+      const playerIds = players.map(player => player.id)
+      updates[`teams/${team.id}/playerIds`] = playerIds
+      updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = playerIds
     }
   } catch (error) {
     console.error(`${team.name} 데이터를 가져올 수 없습니다`)
     updates[`teams/${team.id}/playerIds`] = []
+    updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = []
   }
 }
