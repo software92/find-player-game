@@ -13,8 +13,6 @@ export interface IFirebaseTeamDetail {
   founded: number
   logo: string
   national: boolean
-
-  leagueId: number
 }
 export interface IFirebaseTeamPlayerIds {
   playerIds: number[]

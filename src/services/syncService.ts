@@ -24,6 +24,8 @@ export const syncFirebase = async (): Promise<void> => {
     return
   }
 
+  console.log('Firebase의 데이터 동기화 작업을 시작합니다')
+
   try {
     const leagueTableData = await fetchLeagueTableData(DEFAULT_LEAGUE)
 
@@ -31,20 +33,24 @@ export const syncFirebase = async (): Promise<void> => {
       throw new Error('리그 데이터를 가져오지 못했습니다.')
 
     const updates: IFirebaseObject = {}
+    const playerIdsInLeague: number[] = []
 
     // temp
     const tableData = leagueTableData.slice(0, 2)
 
+    // for (const { team } of leagueTableData) {
+    for (const { team } of tableData) {
+      const playerIdsInTeam = await syncTeam(team, updates)
+      playerIdsInLeague.push(...playerIdsInTeam)
+
+      await sleep(3000)
+    }
+
+    updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
+    updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = playerIdsInLeague
     updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
       ({ team }) => team.id,
     )
-    updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
-
-    // for (const { team } of leagueTableData) {
-    for (const { team } of tableData) {
-      await syncTeam(team, updates)
-      await sleep(5000)
-    }
 
     const dataToStore = { ...updates }
 
@@ -69,9 +75,10 @@ const getNowYearNMonth = (): string => {
 const syncTeam = async (
   team: ITeam1,
   updates: IFirebaseObject,
-): Promise<void> => {
+): Promise<number[]> => {
   updates[`teams/${team.id}/info`] = { ...team }
   updates[`teams/${team.id}/updatedAt`] = serverTimestamp()
+
   try {
     const squadData = await fetchSquadData(team.id)
     const players = squadData?.players || []
@@ -79,7 +86,8 @@ const syncTeam = async (
     if (players.length === 0) {
       console.warn(`${team.name} 선수 데이터가 없습니다`)
       updates[`teams/${team.id}/playerIds`] = []
-      updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = []
+
+      return []
     } else {
       players.forEach(player => {
         const playerAddedTeamInfo: IFirebasePlayer = {
@@ -94,11 +102,13 @@ const syncTeam = async (
       })
       const playerIds = players.map(player => player.id)
       updates[`teams/${team.id}/playerIds`] = playerIds
-      updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = playerIds
+
+      return playerIds
     }
   } catch (error) {
     console.error(`${team.name} 데이터를 가져올 수 없습니다`)
     updates[`teams/${team.id}/playerIds`] = []
-    updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = []
+
+    return []
   }
 }
