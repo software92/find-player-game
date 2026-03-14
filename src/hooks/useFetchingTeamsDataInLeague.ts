@@ -13,7 +13,7 @@ const STATIC_DATA_OPTIONS = {
   refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
 }
 
-const queryKeys = (leagueId: number) => [leagueId, 'total', 'clubs'] as const
+const queryKeys = (leagueId: number) => [leagueId, 'league', 'teams'] as const
 
 const useFetchingTeamsDataInLeague = (leagueId: number) => {
   // const setClubs = useSetRecoilState(clubsState)
@@ -21,20 +21,21 @@ const useFetchingTeamsDataInLeague = (leagueId: number) => {
   const {
     isPending,
     error,
-    data: teams,
+    data: teamsInLeague,
   } = useQuery<IFirebaseTeamDetail[], Error>({
     queryKey: queryKeys(leagueId),
     queryFn: async () => {
       const teamIds = await fetchTeamIdsInLeague(leagueId)
-      const promiseArr = teamIds.map(id => fetchTeam(id))
-      const result = await Promise.all(promiseArr)
 
-      return result
+      const promiseArr = teamIds.map(id => fetchTeam(id))
+      const teams = await Promise.all(promiseArr)
+
+      return teams.filter(team => team !== null)
     },
     ...STATIC_DATA_OPTIONS,
   })
 
-  return { isPending, error, teams }
+  return { isPending, error, teamsInLeague }
 }
 
 export default useFetchingTeamsDataInLeague

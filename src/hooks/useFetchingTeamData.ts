@@ -13,7 +13,7 @@ const STATIC_DATA_OPTIONS = {
   refetchOnReconnect: false, // 네트워크 재연결 시 재요청 방지
 }
 
-const queryKeys = (teamId: number) => [teamId, 'total', 'clubs'] as const
+const queryKeys = (teamId: number) => [teamId, 'total', 'team'] as const
 
 // 단일 팀 정보 조회
 const useFetchingTeamData = (teamId: number) => {
@@ -23,7 +23,7 @@ const useFetchingTeamData = (teamId: number) => {
     isPending,
     error,
     data: team,
-  } = useQuery<IFirebaseTeamDetail, Error, IFirebaseTeamDetail>({
+  } = useQuery<IFirebaseTeamDetail, Error>({
     queryKey: queryKeys(teamId),
     queryFn: () => fetchTeam(teamId),
     ...STATIC_DATA_OPTIONS,
