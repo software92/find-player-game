@@ -19,10 +19,10 @@ export const syncFirebase = async (): Promise<void> => {
   const now = getNowYearNMonth()
   const lastUpdate = localStorage.getItem(LS_KEY)
 
-  if (lastUpdate == now) {
-    console.log('최신 데이터입니다. firebase를 동기화하지 않습니다.')
-    return
-  }
+  // if (lastUpdate == now) {
+  //   console.log('최신 데이터입니다. firebase를 동기화하지 않습니다.')
+  //   return
+  // }
 
   console.log('Firebase의 데이터 동기화 작업을 시작합니다')
 
@@ -37,18 +37,18 @@ export const syncFirebase = async (): Promise<void> => {
 
     // temp
     const tableData = leagueTableData.slice(0, 2)
-
     // for (const { team } of leagueTableData) {
     for (const { team } of tableData) {
       const playerIdsInTeam = await syncTeam(team, updates)
       playerIdsInLeague.push(...playerIdsInTeam)
 
-      await sleep(3000)
+      await sleep(8000)
     }
 
     updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
     updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = playerIdsInLeague
-    updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
+    updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = tableData.map(
+      // updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
       ({ team }) => team.id,
     )
 
@@ -92,6 +92,7 @@ const syncTeam = async (
       players.forEach(player => {
         const playerAddedTeamInfo: IFirebasePlayer = {
           ...player,
+          name: removeSpecialAlpha(player.name),
           teamId: team.id,
           teamLogo: team.logo,
           leagueId: DEFAULT_LEAGUE.league,
@@ -112,3 +113,7 @@ const syncTeam = async (
     return []
   }
 }
+
+// 특수 알파벳 제거: 'B. ŠEŠKO' -> 'B. SESKO
+const removeSpecialAlpha = (str: string) =>
+  str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
