@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
 import Club from './Club'
-import { DB_DEFAULT_DATA } from '../constant'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 import { keyframes } from 'styled-components'
+import { DB_DEFAULT_DATA } from '@/constant'
 
 // 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
 const shimmer = keyframes`
