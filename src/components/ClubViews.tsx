@@ -1,26 +1,41 @@
-import styled from 'styled-components'
+'B. ŠEŠKO'.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+import styled, { css } from 'styled-components'
 import Club from './Club'
 import { DB_DEFAULT_DATA } from '../constant'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 
-interface IClubList {
+interface IClubContainer {
   $isLoading: boolean
 }
-const ClubList = styled.div<IClubList>`
-  display: ${props => (props.$isLoading ? 'flex' : 'grid')};
-  ${props => !props.$isLoading && `grid-template-columns: repeat(3, 1fr);`}
+
+const ClubContainer = styled.div<IClubContainer>`
+  grid-template-columns: repeat(3, 1fr);
+
+  ${props =>
+    props.$isLoading
+      ? css`
+          display: flex;
+          background-color: transparent;
+          cursor: wait;
+        `
+      : css`
+          display: grid;
+          background-color: #8ecae6;
+          cursor: auto;
+        `}
 
   justify-content: center;
   align-items: center;
   gap: 10px;
   padding: 10px;
   max-width: 250px;
-  background-color: ${props => (props.$isLoading ? 'transparent' : '#8ecae6')};
-  height: auto;
+
+  height: fit-content;
   border-radius: 15px;
 
   transition: all 0.5s ease-in-out;
-  cursor: ${props => (props.$isLoading ? 'wait' : 'auto')};
+
+  z-index: 31;
 
   ${props => props.theme.media.tablet} {
     display: none;
@@ -47,25 +62,25 @@ const ClubViews = () => {
 
   if (isPending) {
     return (
-      <ClubList $isLoading>
+      <ClubContainer $isLoading>
         <Loader>
           <span>Loading...</span>
         </Loader>
-      </ClubList>
+      </ClubContainer>
     )
   }
 
   if (error || !teams || teams.length === 0) {
     error && console.error(`팀 정보를 가져올 수 없습니다:`, error)
-    return <ClubList $isLoading>현재 팀을 찾을 수 없습니다</ClubList>
+    return <ClubContainer $isLoading>현재 팀을 찾을 수 없습니다</ClubContainer>
   }
 
   return (
-    <ClubList $isLoading={isPending}>
+    <ClubContainer $isLoading={isPending}>
       {teams.map(club => (
         <Club key={club.id} {...club} />
       ))}
-    </ClubList>
+    </ClubContainer>
   )
 }
 

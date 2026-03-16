@@ -1,23 +1,25 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+import { Position, type IFirebasePlayer } from '../types'
 
 const HintList = styled.ul`
   margin-bottom: 40px;
-`;
+`
 const HintItem = styled.li`
-  margin-top: 30px;
-`;
-const WrongAnswer = styled.h3`
+  margin-top: 60px;
+`
+const MyAnswer = styled.h3`
   font-size: 25px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 15px;
-`;
+`
 const Row = styled.div`
   display: flex;
   justify-content: center;
   gap: 30px;
-`;
-const Hint = styled.div`
+`
+const Hint = styled.div<{ $isEqual: boolean }>`
+  position: relative;
   width: 80px;
   height: 80px;
   border: 2px solid white;
@@ -27,83 +29,137 @@ const Hint = styled.div`
   align-items: center;
   font-size: 23px;
   font-weight: bold;
-  background-color: ${(props) => (props.isEqual ? '#06d6a0' : '#8b8c89')};
-`;
+  background-color: ${props => (props.$isEqual ? '#06d6a0' : '#8b8c89')};
+`
+const Label = styled.label`
+  position: absolute;
+  margin-top: 10px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: black;
+  background-color: white;
+  box-shadow: 0px 2px 5px #8b8c89;
+
+  display: flex;
+  align-items: center;
+  & span {
+    font-size: small;
+  }
+`
 
 const ClubEmblem = styled.img`
   width: 50%;
-`;
-const Nation = styled.img`
-  width: 50%;
-  border: 0.5px solid black;
-`;
+`
 
-const HintBox = ({ hintArr }) => {
-  const getPosition = (num) => {
-    return Number(num) === 1
-      ? 'GK'
-      : num < 6
-      ? 'DF'
-      : num < 11
-      ? 'MF'
-      : num < 15
-      ? 'FW'
-      : '--';
-  };
-  const isEqual = (a, b) => (a === b ? true : false);
+interface IHintBoxProps {
+  hintArr: { q: IFirebasePlayer; a: IFirebasePlayer }[]
+}
 
+const HintBox = ({ hintArr }: IHintBoxProps) => {
   return (
-    <HintList>
-      {hintArr.map((hint, index) => {
-        const {
-          age: age1,
-          clubId: clubId1,
-          clubImage: clubImage1,
-          name: name1,
-          nationalities: [{ id: countryId1, image: countryImage1 }],
-          positions: {
-            first: { id: positionId1 },
-          },
-        } = hint.answer;
+    hintArr &&
+    hintArr.length > 0 && (
+      <HintList>
+        {hintArr.map(({ q, a }) => {
+          const {
+            teamId: qTeamId,
+            number: qNumber,
+            age: qAge,
+            position: qPosition,
+          } = q
+          const {
+            teamId: aTeamId,
+            number: aNumber,
+            name: aName,
+            age: aAge,
+            position: aPosition,
+          } = a
 
-        const {
-          age: age2,
-          clubId: clubId2,
-          nationalities: [{ id: countryId2 }],
-          positions: {
-            first: { id: positionId2 },
-          },
-        } = hint.q;
+          return (
+            <HintItem key={a.id}>
+              <MyAnswer>{aName.toUpperCase()}</MyAnswer>
+              <Row>
+                {[
+                  {
+                    label: '클럽 이름',
+                    value: qTeamId === aTeamId,
+                    children: (
+                      <ClubEmblem src={a.teamLogo} alt={a.teamId.toString()} />
+                    ),
+                  },
+                  {
+                    label: '포지션',
+                    value: qPosition === aPosition,
+                    children: <span>{Position[aPosition]}</span>,
+                  },
+                  {
+                    label: '등 번호',
+                    value: qNumber === aNumber,
+                    children: (
+                      <>
+                        <span>{aNumber}</span>
+                        <span>
+                          {qNumber > aNumber
+                            ? '⬆'
+                            : qNumber < aNumber
+                              ? '⬇︎'
+                              : ''}
+                        </span>
+                      </>
+                    ),
+                  },
+                  {
+                    label: '나이',
+                    value: qAge === aAge,
+                    children: (
+                      <>
+                        <span>{aAge}</span>
+                        <span>
+                          {qAge > aAge ? '⬆' : qAge < aAge ? '⬇︎' : ''}
+                        </span>
+                      </>
+                    ),
+                  },
+                ].map((col, idx) => {
+                  return (
+                    <HintColumn
+                      key={idx}
+                      label={col.label}
+                      isEqualValue={col.value}
+                    >
+                      {col.children}
+                    </HintColumn>
+                  )
+                })}
+              </Row>
+            </HintItem>
+          )
+        })}
+      </HintList>
+    )
+  )
+}
 
-        return (
-          <HintItem key={index}>
-            <WrongAnswer>{name1.toUpperCase()}</WrongAnswer>
-            <Row>
-              <Hint isEqual={isEqual(clubId1, clubId2)}>
-                <ClubEmblem src={clubImage1} />
-              </Hint>
-              <Hint
-                isEqual={isEqual(
-                  getPosition(positionId1),
-                  getPosition(positionId2)
-                )}
-              >
-                <span>{getPosition(positionId1)}</span>
-              </Hint>
-              <Hint isEqual={isEqual(age1, age2)}>
-                <span>{`${age1} ${
-                  age2 > age1 ? '☝' : age2 < age1 ? '👇' : ''
-                }`}</span>
-              </Hint>
-              <Hint isEqual={isEqual(countryId1, countryId2)}>
-                <Nation src={countryImage1} />
-              </Hint>
-            </Row>
-          </HintItem>
-        );
-      })}
-    </HintList>
-  );
-};
+export default HintBox
 
-export default HintBox;
+interface IHintColumn {
+  isEqualValue: boolean
+  children: React.ReactNode
+  label: string
+}
+
+function HintColumn({ isEqualValue, children, label }: IHintColumn) {
+  return (
+    <Hint $isEqual={isEqualValue}>
+      {children}
+      <Label>
+        <span>{label}</span>
+      </Label>
+    </Hint>
+  )
+}
