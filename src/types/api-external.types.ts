@@ -58,11 +58,18 @@ export interface IPlayer {
   age: number
   number: number
   photo: string
-  position: 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Attacker'
+  position: keyof typeof Position
 }
 
 // commons
 export interface IPaging {
   current: number
   total: number
+}
+
+export enum Position {
+  'Goalkeeper' = 'GK',
+  'Defender' = 'DF',
+  'Midfielder' = 'MD',
+  'Attacker' = 'FW',
 }
