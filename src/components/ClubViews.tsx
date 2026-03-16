@@ -51,6 +51,7 @@ const ClubContainer = styled.div<IClubContainer>`
   padding: 10px;
   max-width: 250px;
 
+  min-height: 80px;
   height: fit-content;
   border-radius: 15px;
 
@@ -79,9 +80,11 @@ const ClubViews = () => {
     )
   }
 
+  const showSkeleton = isPending && (!teams || teams.length === 0)
+
   return (
     <ClubContainer $isLoading={isPending}>
-      {isPending && (!teams || teams.length === 0)
+      {showSkeleton
         ? Array.from({ length: 18 }).map((_, idx) => {
             return <ClubSkeleton key={idx} />
           })
