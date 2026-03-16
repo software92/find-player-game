@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Cover from '../components/Cover'
-import Submission from '../components/Submission'
+import Cover from '../pages/Cover'
+import Submission from '../pages/Submission'
 import RootLayout from '../components/layout/RootLayout'
 import routerPath from '../constant/routerPath'
 
