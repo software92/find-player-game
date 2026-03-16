@@ -1,8 +1,30 @@
-'B. ŠEŠKO'.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 import styled, { css } from 'styled-components'
 import Club from './Club'
 import { DB_DEFAULT_DATA } from '../constant'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
+import { keyframes } from 'styled-components'
+
+// 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
+const shimmer = keyframes`
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+`
+
+const SkeletonBase = styled.div`
+  background: #eee;
+  /* 그라데이션을 넓게 설정하고 배경 크기를 200%로 설정 */
+  background-image: linear-gradient(90deg, #eee 0%, #c5c4c4c9 50%, #eee 100%);
+  background-size: 200% 100%;
+  animation: ${shimmer} 1.5s infinite linear;
+  border-radius: 8px;
+`
+
+const ClubSkeleton = styled(SkeletonBase)`
+  min-width: calc(210px / 3);
+  aspect-ratio: 1/1;
+  border-radius: 25%; // 원형 로고인 경우
+  margin: auto;
+`
 
 interface IClubContainer {
   $isLoading: boolean
@@ -14,15 +36,14 @@ const ClubContainer = styled.div<IClubContainer>`
   ${props =>
     props.$isLoading
       ? css`
-          display: flex;
-          background-color: transparent;
           cursor: wait;
         `
       : css`
-          display: grid;
-          background-color: #8ecae6;
           cursor: auto;
         `}
+
+  display: grid;
+  background-color: #8ecae6;
 
   justify-content: center;
   align-items: center;
@@ -42,17 +63,6 @@ const ClubContainer = styled.div<IClubContainer>`
   }
 `
 
-const Loader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  & span {
-    font-size: 30px;
-    font-weight: bold;
-    margin: auto;
-  }
-`
-
 const ClubViews = () => {
   const {
     isPending,
@@ -60,26 +70,22 @@ const ClubViews = () => {
     teamsInLeague: teams,
   } = useFetchingTeamsDataInLeague(DB_DEFAULT_DATA.league)
 
-  if (isPending) {
+  if (error) {
+    error && console.error(`팀 정보를 가져올 수 없습니다:`, error)
     return (
-      <ClubContainer $isLoading>
-        <Loader>
-          <span>Loading...</span>
-        </Loader>
+      <ClubContainer $isLoading style={{ display: 'block' }}>
+        <span>현재 팀을 찾을 수 없습니다</span>
       </ClubContainer>
     )
   }
 
-  if (error || !teams || teams.length === 0) {
-    error && console.error(`팀 정보를 가져올 수 없습니다:`, error)
-    return <ClubContainer $isLoading>현재 팀을 찾을 수 없습니다</ClubContainer>
-  }
-
   return (
     <ClubContainer $isLoading={isPending}>
-      {teams.map(club => (
-        <Club key={club.id} {...club} />
-      ))}
+      {isPending && (!teams || teams.length === 0)
+        ? Array.from({ length: 18 }).map((_, idx) => {
+            return <ClubSkeleton key={idx} />
+          })
+        : teams.map(club => <Club key={club.id} {...club} />)}
     </ClubContainer>
   )
 }
