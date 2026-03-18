@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import Club from './Club'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 import { keyframes } from 'styled-components'
-import { DB_DEFAULT_DATA } from '@/constant'
+import { DEFAULT_API_PARAMS } from '@/constant'
 
 // 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
 const shimmer = keyframes`
@@ -69,7 +69,7 @@ const ClubViews = () => {
     isPending,
     error,
     teamsInLeague: teams,
-  } = useFetchingTeamsDataInLeague(DB_DEFAULT_DATA.league)
+  } = useFetchingTeamsDataInLeague(DEFAULT_API_PARAMS.league)
 
   if (error) {
     error && console.error(`팀 정보를 가져올 수 없습니다:`, error)
