@@ -21,7 +21,6 @@ const Container = styled.div`
     width: 100%;
   }
 `
-
 const FormContainer = styled.div`
   position: relative;
   width: 100%;
@@ -56,7 +55,7 @@ const Submission = () => {
     error,
     playersInLeague: squad,
   } = useFetchingPlayersDataInLeague(DEFAULT_API_PARAMS.league, {
-    enabled: quiz === null,
+    enabled: quiz !== null,
   })
 
   const [hintArr, setHintArr] = useState<IHint[]>([])
@@ -69,7 +68,7 @@ const Submission = () => {
     }
   }, [quiz])
 
-  if (quiz === null || isPending)
+  if (quiz === null || isPending) {
     return (
       <Container>
         <div
@@ -88,6 +87,7 @@ const Submission = () => {
         </div>
       </Container>
     )
+  }
 
   if (error) {
     return (
