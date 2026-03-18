@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import styled from 'styled-components'
 import HintBox from '../components/HintBox'
 import { useNavigate } from 'react-router-dom'
@@ -8,11 +8,13 @@ import type { IHint } from '../types'
 
 import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
 import SearchForm from '@/components/SearchForm'
-import { quizState } from '@/atoms/quizState'
+import { inputState, quizState } from '@/atoms/quizState'
 import { Helmet } from 'react-helmet-async'
 import { DEFAULT_API_PARAMS } from '@/constant'
+import useQuizGenerator from '@/hooks/useQuizGenerator'
 
 const Container = styled.div`
+  position: relative;
   width: 500px;
   min-height: 300px;
   border-radius: 15px;
@@ -45,11 +47,62 @@ const Photo = styled.img<{ $isCorrect: boolean }>`
   margin-top: 10px;
   margin-bottom: 20px;
   ${props => (props.$isCorrect ? null : 'filter: blur(13px)')};
+
+  animation: showing-image 0.3s ease-out forwards;
+  @keyframes showing-image {
+    0% {
+      opacity: 0;
+      transform: translateX(20px); /* 약간 작게 시작해서 위로 올라옴 */
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+`
+const AlertButton = styled.button`
+  position: absolute;
+  padding: 8px 12px;
+  top: 5%;
+  right: 5%;
+  z-index: 10;
+
+  font-size: 15px;
+  background: rgb(65, 105, 225, 0.62);
+  box-shadow: 0px 2px #4169e1;
+  color: white;
+  padding: 0.5em 0.8em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+`
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: skyblue;
+  border-radius: 15px;
+  & span {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 3rem;
+    color: white;
+    word-break: keep-all;
+  }
 `
 
 const Submission = () => {
   const navigate = useNavigate()
   const quiz = useRecoilValue(quizState)
+  const setValue = useSetRecoilState(inputState)
   const {
     isPending,
     error,
@@ -71,20 +124,11 @@ const Submission = () => {
   if (quiz === null || isPending) {
     return (
       <Container>
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            textAlign: 'center',
-            alignContent: 'center',
-            backgroundColor: 'skyblue',
-            borderRadius: '15px',
-          }}
-        >
+        <LoadingWrapper>
           <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
             Loading...
           </span>
-        </div>
+        </LoadingWrapper>
       </Container>
     )
   }
@@ -92,11 +136,19 @@ const Submission = () => {
   if (error) {
     return (
       <Container>
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.
-        </div>
+        <LoadingWrapper>
+          <span>
+            데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.
+          </span>
+        </LoadingWrapper>
       </Container>
     )
+  }
+
+  const resetQuiz = () => {
+    setIsCorrect(false)
+    setHintArr([])
+    setValue('')
   }
 
   return (
@@ -107,6 +159,7 @@ const Submission = () => {
       <Container>
         <FormContainer>
           <Photo
+            key={quiz?.photo || null}
             draggable={false}
             src={quiz?.photo || null}
             alt={`${quiz.name}`}
@@ -121,9 +174,23 @@ const Submission = () => {
           />
         </FormContainer>
         {hintArr && hintArr?.length > 0 && <HintBox hintArr={hintArr} />}
+        <ChangeButton resetQuiz={resetQuiz} />
       </Container>
     </>
   )
 }
 
 export default Submission
+
+function ChangeButton({ resetQuiz }: { resetQuiz: () => void }) {
+  const { generateRandomPlayer } = useQuizGenerator()
+  const handleClick = () => {
+    generateRandomPlayer()
+    resetQuiz()
+  }
+  return (
+    <AlertButton onClick={handleClick}>
+      <span>문제 변경</span>
+    </AlertButton>
+  )
+}
