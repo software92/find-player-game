@@ -1,21 +1,15 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 import { quizState, totalPlayerState } from '../atom'
-import AutoSearch from '../components/AutoSearch'
 import HintBox from '../components/HintBox'
 import { Navigate } from 'react-router-dom'
 import routerPath from '../constant/routerPath'
 import { DB_DEFAULT_DATA } from '../constant'
-import type { IFirebasePlayer } from '../types'
+import type { IHint } from '../types'
 
-import useDebouncedValue from '../hooks/useDebouncedValue'
 import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
-
-interface IHint {
-  q: IFirebasePlayer
-  a: IFirebasePlayer
-}
+import SearchForm from '@/components/SearchForm'
 
 const Container = styled.div`
   width: 500px;
@@ -53,21 +47,6 @@ const Photo = styled.img<{ $isCorrect: boolean }>`
   ${props => (props.$isCorrect ? null : 'filter: blur(13px)')};
 `
 
-const Input = styled.input`
-  width: 70%;
-  height: 35px;
-  border: 1.3px solid #3b3b3b;
-  text-align: start;
-  font-size: 17px;
-  font-weight: bold;
-  outline: none;
-  padding-left: 10px;
-  border-radius: 5px;
-  &::placeholder {
-    color: #979dac;
-  }
-`
-
 const Submission = () => {
   const quiz = useRecoilValue(quizState)
   const {
@@ -81,12 +60,10 @@ const Submission = () => {
   const totalPlayer = useRecoilValue(totalPlayerState)
 
   if (quiz === null) {
-    alert('현재 문제가 없습니다. 문제를 다시 설정합니다')
+    alert('현재 문제가 준비되지 않았습니다. 문제를 다시 설정합니다.')
 
     return <Navigate to={routerPath.HOME} />
   }
-
-  // 자동완성(AutoSearch)으로 검색된 선수만 submit 허용
 
   if (isPending)
     return (
@@ -118,86 +95,6 @@ const Submission = () => {
 }
 
 export default Submission
-
-interface IForm {
-  quiz: IFirebasePlayer
-  squad: IFirebasePlayer[]
-  disabled: boolean
-  setIsCorrect: React.Dispatch<boolean>
-  setHintArr: React.Dispatch<React.SetStateAction<IHint[]>>
-}
-
-function SearchForm({
-  quiz,
-  squad,
-  disabled,
-  setIsCorrect,
-  setHintArr,
-}: IForm) {
-  const [value, setValue] = useState('')
-  const debouncedValue = useDebouncedValue(value, 500)
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.currentTarget.value.toUpperCase())
-  }
-
-  // hint: age number position club
-  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!quiz || !value || disabled) return
-    if (filteredPlayerss.length === 0) return
-
-    const selectPlayer = filteredPlayerss[0]
-
-    const hintObj: IHint = { q: quiz, a: selectPlayer }
-
-    setHintArr(prev => {
-      const checkForDuplicate = prev.find(hint => hint.a.id === selectPlayer.id)
-
-      if (checkForDuplicate) {
-        alert('이미 입력한 이름입니다. 다른 이름을 입력해주세요.')
-        return prev
-      }
-
-      return [hintObj, ...prev]
-    })
-    setValue('')
-
-    if (quiz.id === selectPlayer.id) {
-      setIsCorrect(true)
-      setValue(selectPlayer.name.toUpperCase())
-      return
-    }
-  }
-
-  const filteredPlayerss = useMemo(() => {
-    if (disabled) return []
-    if (!squad || debouncedValue.length < 3) return []
-
-    return squad.filter(player => {
-      const name = player.name.toUpperCase()
-      return name.includes(debouncedValue.trim())
-    })
-  }, [squad, debouncedValue, disabled])
-
-  return (
-    <form method='get' onSubmit={onSubmit}>
-      <Input
-        disabled={disabled}
-        type='text'
-        name='player'
-        id='player'
-        placeholder='Write a Full-name'
-        onChange={onChange}
-        value={value}
-        autoComplete='off'
-      />
-      {debouncedValue.length > 2 && (
-        <AutoSearch filteredPlayers={filteredPlayerss} setValue={setValue} />
-      )}
-    </form>
-  )
-}
 
 function Loader() {
   return (

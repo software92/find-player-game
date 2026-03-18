@@ -1,5 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import type { IFirebasePlayer } from '../types'
+import { useEffect, useRef } from 'react'
 
 const AutoSearchBox = styled.ul`
   width: 70%;
@@ -11,12 +12,21 @@ const AutoSearchBox = styled.ul`
   background-color: white;
   border-radius: 0 0 5px 5px;
 `
-const PlayerBox = styled.button`
+const PlayerBox = styled.button<{ $selected: boolean }>`
   width: 100%;
   height: 35px;
   font-size: 15px;
   font-weight: bold;
   color: rgba(59, 59, 59, 0.5);
+
+  ${props =>
+    props.$selected
+      ? css`
+          border: 2px solid black;
+        `
+      : css`
+          border-color: transparent;
+        `}
   display: flex;
   align-items: center;
   gap: 10px;
@@ -36,27 +46,40 @@ const Name = styled.span`
 `
 interface IAutoSearchProps {
   filteredPlayers: IFirebasePlayer[]
-  setValue: React.Dispatch<string>
+  handleSelect: (player: IFirebasePlayer) => void
+  focusedIndex: number
 }
 
-// 쓰로틀링 or 디바운싱(이게 맞는거 같은??, 부모 컴포넌트)
-// 자동완성된 리스트에서 선수를 선택하면 입력창의 value를 해당 선수 이름으로 변경
-const AutoSearch = ({ filteredPlayers, setValue }: IAutoSearchProps) => {
-  const pickPlayer = (name: string) => {
-    setValue(name)
-  }
+const AutoSearch = ({
+  filteredPlayers,
+  handleSelect,
+  focusedIndex,
+}: IAutoSearchProps) => {
+  const listRef = useRef(null)
+
+  useEffect(() => {
+    if (focusedIndex >= 0 && listRef.current) {
+      const selectElement = listRef.current.children[
+        focusedIndex
+      ] as HTMLUListElement
+      if (selectElement) {
+        selectElement.scrollIntoView({ behavior: 'auto', block: 'nearest' })
+      }
+    }
+  }, [focusedIndex])
 
   return (
     filteredPlayers?.length > 0 && (
-      <AutoSearchBox>
-        {filteredPlayers.map(player => {
+      <AutoSearchBox ref={listRef}>
+        {filteredPlayers.map((player, idx) => {
           const name = player.name.toUpperCase()
 
           return (
             <PlayerBox
               key={player.id}
               type='button'
-              onClick={() => pickPlayer(name)}
+              $selected={focusedIndex === idx}
+              onClick={() => handleSelect(player)}
             >
               <ClubEmblem
                 src={player.teamLogo || ''}

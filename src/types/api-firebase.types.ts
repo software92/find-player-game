@@ -17,3 +17,8 @@ export interface IFirebaseTeamDetail {
 export interface IFirebaseTeamPlayerIds {
   playerIds: number[]
 }
+
+export interface IHint {
+  q: IFirebasePlayer
+  a: IFirebasePlayer
+}
