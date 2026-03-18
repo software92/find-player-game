@@ -20,7 +20,7 @@ const SkeletonBase = styled.div`
 `
 
 const ClubSkeleton = styled(SkeletonBase)`
-  min-width: calc(210px / 3);
+  min-width: 70px;
   aspect-ratio: 1/1;
   border-radius: 25%; // 원형 로고인 경우
   margin: auto;
@@ -55,8 +55,6 @@ const ClubContainer = styled.div<IClubContainer>`
   height: fit-content;
   border-radius: 15px;
 
-  transition: all 0.5s ease-in-out;
-
   z-index: 31;
 
   ${props => props.theme.media.tablet} {
@@ -80,7 +78,7 @@ const ClubViews = () => {
     )
   }
 
-  const showSkeleton = isPending && (!teams || teams.length === 0)
+  const showSkeleton = isPending || !teams || teams.length === 0
 
   return (
     <ClubContainer $isLoading={isPending}>

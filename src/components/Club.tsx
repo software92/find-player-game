@@ -5,6 +5,8 @@ import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
 
 const Container = styled.div<{ $isHover: boolean }>`
+  min-width: 70px;
+  aspect-ratio: 1/1;
   position: relative;
   text-align: center;
   padding: 5px;
