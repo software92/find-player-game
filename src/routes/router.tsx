@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Cover from '../pages/Cover'
 import Submission from '../pages/Submission'
 import RootLayout from '../components/layout/RootLayout'
 import routerPath from '../constant/routerPath'
+import coverLoader from './coverLoader'
+import { Cover, RazyCover } from '@/pages/Cover'
 
 const routes = [
   {
@@ -12,6 +13,8 @@ const routes = [
       {
         index: true,
         element: <Cover />,
+        loader: coverLoader,
+        HydrateFallback: () => <RazyCover />,
       },
       {
         path: routerPath.SUBMISSION,

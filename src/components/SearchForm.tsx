@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import AutoSearch from './AutoSearch'
 import type { IFirebasePlayer, IHint } from '@/types'
+import { useRecoilState } from 'recoil'
+import { inputState } from '@/atoms/quizState'
 
 interface IForm {
   quiz: IFirebasePlayer
@@ -34,7 +36,8 @@ function SearchForm({
   setIsCorrect,
   setHintArr,
 }: IForm) {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useRecoilState(inputState)
+
   const [focusedIndex, setFocusedIndex] = useState(-1)
   const debouncedValue = useDebouncedValue(value, 500)
 
@@ -101,6 +104,9 @@ function SearchForm({
 
   const onSubmit = (e: React.SubmitEvent) => e.preventDefault()
 
+  useEffect(() => {
+    setValue('')
+  }, [])
   // 검색어가 바뀌면 포커스 초기화
   useEffect(() => {
     setFocusedIndex(-1)

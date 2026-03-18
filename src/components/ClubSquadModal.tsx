@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import useFetchingTeamSquadData from '../hooks/useFetchingTeamPlayersData'
 import { useEffect, useRef } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { inputState } from '@/atoms/quizState'
 
 interface IClubSquadModalProps {
   id: number
@@ -65,6 +67,7 @@ const Loader = styled.li`
 
 // 클럽의 등록된 선수를 보여주는 Modal
 const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
+  const setValue = useSetRecoilState(inputState)
   const {
     isPending,
     error,
@@ -72,10 +75,14 @@ const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
   } = useFetchingTeamSquadData(id)
   const listRef = useRef<HTMLUListElement>(null)
 
+  const handleClick = (name: string) => {
+    setValue(name.toUpperCase())
+  }
+
   useEffect(() => {
     if (!listRef.current || !parentRef.current || isPending) return
 
-    const { y, bottom } = parentRef.current.getBoundingClientRect()
+    const { bottom } = parentRef.current.getBoundingClientRect()
     const playListHeight = listRef.current.clientHeight
     const screenHeight = window.innerHeight
 
@@ -93,7 +100,13 @@ const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
       ) : error || !players?.length ? (
         <Message message='현재 선수 목록을 가져올 수 없습니다' />
       ) : (
-        players.map(player => <Player key={player.id} name={player.name} />)
+        players.map(player => (
+          <Player
+            key={player.id}
+            name={player.name}
+            handleClick={() => handleClick(player.name)}
+          />
+        ))
       )}
     </PlayerList>
   )
@@ -109,9 +122,15 @@ function Message({ message }: { message: string; isLoading?: boolean }) {
   )
 }
 
-function Player({ name }: { name: string }) {
+function Player({
+  name,
+  handleClick,
+}: {
+  name: string
+  handleClick: () => void
+}) {
   return (
-    <PlayerRow>
+    <PlayerRow onClick={handleClick}>
       <Name>{name}</Name>
     </PlayerRow>
   )

@@ -1,15 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { quizState, totalPlayerState } from '../atom'
 import HintBox from '../components/HintBox'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import routerPath from '../constant/routerPath'
-import { DB_DEFAULT_DATA } from '../constant'
 import type { IHint } from '../types'
 
 import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
 import SearchForm from '@/components/SearchForm'
+import { quizState } from '@/atoms/quizState'
+import { Helmet } from 'react-helmet-async'
+import { DEFAULT_API_PARAMS } from '@/constant'
 
 const Container = styled.div`
   width: 500px;
@@ -48,24 +49,27 @@ const Photo = styled.img<{ $isCorrect: boolean }>`
 `
 
 const Submission = () => {
+  const navigate = useNavigate()
   const quiz = useRecoilValue(quizState)
   const {
     isPending,
     error,
     playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague(DB_DEFAULT_DATA.league)
+  } = useFetchingPlayersDataInLeague(DEFAULT_API_PARAMS.league, {
+    enabled: quiz === null,
+  })
 
   const [hintArr, setHintArr] = useState<IHint[]>([])
   const [isCorrect, setIsCorrect] = useState<boolean>(false)
-  const totalPlayer = useRecoilValue(totalPlayerState)
 
-  if (quiz === null) {
-    alert('현재 문제가 준비되지 않았습니다. 문제를 다시 설정합니다.')
+  useEffect(() => {
+    if (quiz === null) {
+      navigate(routerPath.HOME, { replace: true })
+      alert('문제가 준비되지 않았습니다.')
+    }
+  }, [quiz])
 
-    return <Navigate to={routerPath.HOME} />
-  }
-
-  if (isPending)
+  if (quiz === null || isPending)
     return (
       <Container>
         <div
@@ -75,6 +79,7 @@ const Submission = () => {
             textAlign: 'center',
             alignContent: 'center',
             backgroundColor: 'skyblue',
+            borderRadius: '15px',
           }}
         >
           <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
@@ -83,6 +88,7 @@ const Submission = () => {
         </div>
       </Container>
     )
+
   if (error) {
     return (
       <Container>
@@ -94,24 +100,29 @@ const Submission = () => {
   }
 
   return (
-    <Container>
-      <FormContainer>
-        <Photo
-          draggable={false}
-          src={quiz?.photo || null}
-          alt={`${quiz.name}`}
-          $isCorrect={isCorrect}
-        />
-        <SearchForm
-          squad={squad}
-          quiz={quiz}
-          disabled={isCorrect}
-          setIsCorrect={setIsCorrect}
-          setHintArr={setHintArr}
-        />
-      </FormContainer>
-      {hintArr && hintArr?.length > 0 && <HintBox hintArr={hintArr} />}
-    </Container>
+    <>
+      <Helmet>
+        <title>Quiz | Find Football Player</title>
+      </Helmet>
+      <Container>
+        <FormContainer>
+          <Photo
+            draggable={false}
+            src={quiz?.photo || null}
+            alt={`${quiz.name}`}
+            $isCorrect={isCorrect}
+          />
+          <SearchForm
+            squad={squad}
+            quiz={quiz}
+            disabled={isCorrect}
+            setIsCorrect={setIsCorrect}
+            setHintArr={setHintArr}
+          />
+        </FormContainer>
+        {hintArr && hintArr?.length > 0 && <HintBox hintArr={hintArr} />}
+      </Container>
+    </>
   )
 }
 

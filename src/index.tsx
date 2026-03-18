@@ -3,12 +3,11 @@ import { RecoilRoot } from 'recoil'
 import { HelmetProvider } from 'react-helmet-async'
 import { syncFirebase } from './services/syncService'
 import { StrictMode } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import BrowserRouter from './BrowserRouter'
 import { ThemeProvider } from 'styled-components'
 import { theme } from './styles/theme'
-
-const queryClient = new QueryClient()
+import { queryClient } from './queryClient'
 
 syncFirebase()
 

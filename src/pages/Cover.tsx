@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { quizState, totalPlayerState } from '../atom'
 
-import type { IPlayer } from '../types'
-import { DB_DEFAULT_DATA } from '../constant'
-import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
+import { quizState } from '@/atoms/quizState'
+import useQuizGenerator from '@/hooks/useQuizGenerator'
+import routerPath from '@/constant/routerPath'
 
 interface IStartButton {
   $isWait: boolean
@@ -37,53 +36,35 @@ const Span = styled.span`
 `
 
 // TODO: 임시 스쿼드 -> 전체 팀 스쿼드 변경
-const Cover = () => {
-  const [player, setPlayer] = useState<IPlayer>(null)
+export const Cover = () => {
+  const quiz = useRecoilValue(quizState)
   const navigate = useNavigate()
-  const setQuiz = useSetRecoilState(quizState)
 
-  // 임시 스쿼드 목록
-  const {
-    isPending,
-    error,
-    playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague(DB_DEFAULT_DATA.league)
-
-  const selectPlayer = () => {
-    if (!squad || squad?.length === 0) return
-
-    const randomIdx = extractRandomNumber(squad.length)
-
-    setPlayer(squad[randomIdx])
-    setQuiz(squad[randomIdx])
-  }
+  const { generateRandomPlayer } = useQuizGenerator()
 
   useEffect(() => {
-    selectPlayer()
-  }, [squad])
+    if (!quiz) {
+      generateRandomPlayer()
+    }
+  }, [generateRandomPlayer, quiz])
 
   const handleClick = () => {
-    if (error) return alert('현재 서비스를 이용할 수 없습니다')
-    if (isPending || !player) return
+    if (!quiz) return
 
-    navigate('/submission')
+    navigate(routerPath.SUBMISSION)
   }
 
   return (
-    <Button $isWait={isPending} onClick={handleClick}>
-      <Span>
-        {!error
-          ? isPending || !player
-            ? 'Stand by'
-            : 'Game Start'
-          : '현재 서비스를 이용할 수 없습니다'}
-      </Span>
+    <Button $isWait={!quiz} onClick={handleClick}>
+      <Span>{!quiz ? '문제를 준비 중입니다' : 'Game Start'}</Span>
     </Button>
   )
 }
 
-export default Cover
-
-function extractRandomNumber(number: number) {
-  return Math.floor(Math.random() * number)
+export function RazyCover() {
+  return (
+    <Button $isWait={true}>
+      <Span>Stand by</Span>
+    </Button>
+  )
 }

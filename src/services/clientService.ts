@@ -1,6 +1,6 @@
 // firebase -> client
 import { firebaseApiInstance } from '../api/firebaseClient'
-import { DB_DEFAULT_DATA, FIREBASE_API_ENDPOINT } from '../constant'
+import { DEFAULT_API_PARAMS, FIREBASE_API_ENDPOINT } from '../constant'
 import { getFirebaseURLPath } from '../utils/path'
 import type { IFirebasePlayer, IFirebaseTeamDetail } from '../types'
 import type { FirebaseReturnPath } from '../utils/path'
@@ -40,6 +40,15 @@ export const fetchTeamPlayerIds = async (teamId: number): Promise<number[]> => {
   return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
 }
 
+// 리그 내 모든 팀 id 조회
+export const fetchTeamIdsInLeague = async (
+  leagueId: number = DEFAULT_API_PARAMS.league,
+): Promise<number[]> => {
+  const url = FIREBASE_API_ENDPOINT.LEAGUE_TEAM_IDS(leagueId)
+
+  return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
+}
+
 // 리그 내 모든 선수 id 조회
 export const fetchPlayerIdsInLeague = async (
   leagueId: number,
@@ -48,11 +57,16 @@ export const fetchPlayerIdsInLeague = async (
 
   return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
 }
-// 리그 내 모든 팀 id 조회
-export const fetchTeamIdsInLeague = async (
-  leagueId: number = DB_DEFAULT_DATA.league,
-): Promise<number[]> => {
-  const url = FIREBASE_API_ENDPOINT.LEAGUE_TEAM_IDS(leagueId)
 
-  return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
+// 리그 내 모든 선수 정보 조회
+export const fetchPlayersDataInLeague = async (
+  leagueId: number,
+): Promise<IFirebasePlayer[]> => {
+  const playerIds = await fetchPlayerIdsInLeague(leagueId)
+  const requestPromise = playerIds.map(id => fetchPlayer(id))
+  const players = await Promise.all(requestPromise).then(result =>
+    result.flat(),
+  )
+
+  return players
 }
