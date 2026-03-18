@@ -68,9 +68,30 @@ const Submission = () => {
   if (isPending)
     return (
       <Container>
-        <Loader />
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            textAlign: 'center',
+            alignContent: 'center',
+            backgroundColor: 'skyblue',
+          }}
+        >
+          <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+            Loading...
+          </span>
+        </div>
       </Container>
     )
+  if (error) {
+    return (
+      <Container>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.
+        </div>
+      </Container>
+    )
+  }
 
   return (
     <Container>
@@ -95,19 +116,3 @@ const Submission = () => {
 }
 
 export default Submission
-
-function Loader() {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        textAlign: 'center',
-        alignContent: 'center',
-        backgroundColor: 'skyblue',
-      }}
-    >
-      <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>Loading...</span>
-    </div>
-  )
-}
