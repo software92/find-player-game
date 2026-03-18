@@ -81,7 +81,7 @@ const AlertButton = styled.button`
 `
 const LoadingWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 280px;
   text-align: center;
 
   display: flex;
