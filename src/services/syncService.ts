@@ -1,12 +1,13 @@
+// TODO: cloud functions 사용 예정
 // [test - const tableData = leagueTableData.slice(0, 2)]
 // api-football -> firebase data 연결
 import { ref, serverTimestamp, update } from 'firebase/database'
 import { handleFetchError } from '../api'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { database } from '../firebase'
-import { DEFAULT_LEAGUE } from '../constant'
 import type { IFirebasePlayer, ITeam1 } from '../types'
 import { sleep } from '../utils/timer'
+import { DEFAULT_API_PARAMS } from '@/constant'
 
 type IFirebaseObject = Record<string, any>
 
@@ -19,15 +20,15 @@ export const syncFirebase = async (): Promise<void> => {
   const now = getNowYearNMonth()
   const lastUpdate = localStorage.getItem(LS_KEY)
 
-  // if (lastUpdate == now) {
-  //   console.log('최신 데이터입니다. firebase를 동기화하지 않습니다.')
-  //   return
-  // }
+  if (lastUpdate == now) {
+    console.log('최신 데이터입니다. firebase를 동기화하지 않습니다.')
+    return
+  }
 
   console.log('Firebase의 데이터 동기화 작업을 시작합니다')
 
   try {
-    const leagueTableData = await fetchLeagueTableData(DEFAULT_LEAGUE)
+    const leagueTableData = await fetchLeagueTableData(DEFAULT_API_PARAMS)
 
     if (!leagueTableData || leagueTableData.length === 0)
       throw new Error('리그 데이터를 가져오지 못했습니다.')
@@ -36,19 +37,22 @@ export const syncFirebase = async (): Promise<void> => {
     const playerIdsInLeague: number[] = []
 
     // temp
-    const tableData = leagueTableData.slice(0, 2)
+    const tableData = leagueTableData.slice(0, 4)
     // for (const { team } of leagueTableData) {
     for (const { team } of tableData) {
       const playerIdsInTeam = await syncTeam(team, updates)
       playerIdsInLeague.push(...playerIdsInTeam)
 
+      console.log(`${team.name} 동기화 완료`)
       await sleep(8000)
     }
 
-    updates[`leagues/${DEFAULT_LEAGUE.league}/updatedAt`] = serverTimestamp()
-    updates[`leagues/${DEFAULT_LEAGUE.league}/playerIds`] = playerIdsInLeague
-    updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = tableData.map(
-      // updates[`leagues/${DEFAULT_LEAGUE.league}/teamIds`] = leagueTableData.map(
+    updates[`leagues/${DEFAULT_API_PARAMS.league}/updatedAt`] =
+      serverTimestamp()
+    updates[`leagues/${DEFAULT_API_PARAMS.league}/playerIds`] =
+      playerIdsInLeague
+    updates[`leagues/${DEFAULT_API_PARAMS.league}/teamIds`] = tableData.map(
+      // updates[`leagues/${DEFAULT_API_PARAMS.league}/teamIds`] = leagueTableData.map(
       ({ team }) => team.id,
     )
 
@@ -95,7 +99,7 @@ const syncTeam = async (
           name: removeSpecialAlpha(player.name),
           teamId: team.id,
           teamLogo: team.logo,
-          leagueId: DEFAULT_LEAGUE.league,
+          leagueId: DEFAULT_API_PARAMS.league,
         }
 
         updates[`players/${player.id}/info`] = playerAddedTeamInfo
