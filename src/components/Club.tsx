@@ -33,6 +33,8 @@ const Emblem = styled.img`
   display: block; /* 하단 여백 제거 */
 `
 
+const pathWithBasename = `/find-player-game${routerPath.SUBMISSION}`
+
 const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [isHover, setIsHover] = useState(false)
   const [clicked, setClicked] = useState(false)
@@ -40,7 +42,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const parentRef = useRef<HTMLImageElement>(null)
 
   const activeModal = useMemo(() => {
-    return location.pathname === routerPath.SUBMISSION
+    return location.pathname === pathWithBasename
   }, [location.pathname])
 
   const handleMouseEnter = () => {
@@ -62,7 +64,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
       onMouseLeave={handleMouseLeave}
     >
       <Emblem src={logo} alt={name} ref={parentRef} />
-      {onLazyModal && isHover && (
+      {activeModal && onLazyModal && isHover && (
         <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
       )}
     </Container>
