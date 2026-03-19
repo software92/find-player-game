@@ -1,8 +1,8 @@
 name: Firebase Cron Job
 on:
   schedule:
-    # 10분마다 실행 (UTC 기준, test)
-    - cron: '*/10 * * * *'
+    # 60분마다 실행 (UTC 기준, test)
+    - cron: '0 * * * *'
   # 테스트를 위해 수동 실행 버튼 활성화
   workflow_dispatch:
 
