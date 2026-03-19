@@ -27,18 +27,31 @@ const Emblem = styled.img`
 
 const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [isHover, setIsHover] = useState(false)
+  const [clicked, setClicked] = useState(false)
   const onLazyModal = useDebouncedValue(isHover, 300)
   const parentRef = useRef<HTMLImageElement>(null)
 
+  const handleMouseEnter = () => {
+    if (clicked) return
+    setIsHover(true)
+  }
+  const handleMouseLeave = () => {
+    setClicked(false)
+    setIsHover(false)
+  }
+  const offModal = () => {
+    setIsHover(false)
+    setClicked(true)
+  }
   return (
     <Container
       $isHover={isHover}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Emblem src={logo} alt={name} ref={parentRef} />
       {onLazyModal && isHover && (
-        <ClubSquadModal id={id} parentRef={parentRef} />
+        <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
       )}
     </Container>
   )

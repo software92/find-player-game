@@ -7,6 +7,7 @@ import { inputState } from '@/atoms/quizState'
 interface IClubSquadModalProps {
   id: number
   parentRef: React.RefObject<HTMLImageElement>
+  offModal: () => void
 }
 
 const PlayerList = styled.ul`
@@ -66,7 +67,7 @@ const Loader = styled.li`
 `
 
 // 클럽의 등록된 선수를 보여주는 Modal
-const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
+const ClubSquadModal = ({ id, parentRef, offModal }: IClubSquadModalProps) => {
   const setValue = useSetRecoilState(inputState)
   const {
     isPending,
@@ -77,6 +78,7 @@ const ClubSquadModal = ({ id, parentRef }: IClubSquadModalProps) => {
 
   const handleClick = (name: string) => {
     setValue(name.toUpperCase())
+    offModal()
   }
 
   useEffect(() => {
