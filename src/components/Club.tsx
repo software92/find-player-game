@@ -1,22 +1,30 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import ClubSquadModal from './ClubSquadModal'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
+import routerPath from '@/constant/routerPath'
 
-const Container = styled.div<{ $isHover: boolean }>`
+const Container = styled.div<{ $isActive: boolean }>`
   min-width: 70px;
   aspect-ratio: 1/1;
   position: relative;
   text-align: center;
   padding: 5px;
-  cursor: ${props => (props.$isHover ? 'pointer' : 'auto')};
   transition: transform 0.3s ease-in-out;
 
-  &:hover {
-    transform: scale(1.05);
-    z-index: 5;
-  }
+  ${props =>
+    props.$isActive
+      ? css`
+          cursor: pointer;
+          &:hover {
+            transform: scale(1.05);
+            z-index: 5;
+          }
+        `
+      : css`
+          cursor: auto;
+        `}
 `
 
 const Emblem = styled.img`
@@ -30,6 +38,10 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const [clicked, setClicked] = useState(false)
   const onLazyModal = useDebouncedValue(isHover, 300)
   const parentRef = useRef<HTMLImageElement>(null)
+
+  const activeModal = useMemo(() => {
+    return location.pathname === routerPath.SUBMISSION
+  }, [location.pathname])
 
   const handleMouseEnter = () => {
     if (clicked) return
@@ -45,7 +57,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   }
   return (
     <Container
-      $isHover={isHover}
+      $isActive={activeModal && isHover}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
