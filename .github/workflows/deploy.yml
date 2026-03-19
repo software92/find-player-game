@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [deploy]
+    # deploy -> master (배포 브랜치 변경)
+    branches: [master]
 
 permissions:
   contents: read
