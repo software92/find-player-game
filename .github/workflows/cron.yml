@@ -1,7 +1,7 @@
 name: Firebase Cron Job
 on:
   schedule:
-    # 10분마다 실행 (UTC 기준)
+    # 10분마다 실행 (UTC 기준, test)
     - cron: '*/10 * * * *'
   # 테스트를 위해 수동 실행 버튼 활성화
   workflow_dispatch:
@@ -13,4 +13,5 @@ jobs:
       - name: Hit Firebase Function
         run: |
           curl -X GET "https://scheduledsync-ntic65va6q-uc.a.run.app" \
-        #   -H "Authorization: Bearer ${{ secrets.MY_CRON_SECRET }}"
+          -H "Authorization: Bearer ${{ secrets.VITE_FOOTBALL_API_KEY }}${{ secrets.VITE_FIREBASE_API_KEY }}" \
+          -v
