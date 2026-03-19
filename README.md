@@ -1,3 +1,17 @@
+<!-- [o] TODO: 환경 변수로 사용할 변수 or url 파악 후 github secrets 저장 -->
+<!-- 외부 api, firebase key, firebase url만 secrets에 저장   -->
+
+<!-- TODO: cloud functions + 워크플로를 사용해 주기 업데이트 -->
+<!-- TODO: 배포 마무리 -->
+<!-- [o] TODO: .env github에 업로드되어 있다면 제거 -->
+
+<!-- 해야할것
+deploy
+cloud functions
+
+프로젝트 파일, 이력서/자소서 마무리
+ -->
+
 # ⚽️ Find Football Player Quiz
 
 축구 선수의 실루엣과 힌트를 보고 이름을 맞추는 인터랙티브 퀴즈 서비스입니다.
