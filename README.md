@@ -2,7 +2,7 @@
 <!-- 외부 api, firebase key, firebase url만 secrets에 저장   -->
 
 <!-- TODO: cloud functions + 워크플로를 사용해 주기 업데이트 -->
-<!-- TODO: 배포 마무리 -->
+<!-- [o[ TODO: 배포 마무리 (deploy branch에서 테스트 완료)-->
 <!-- [o] TODO: .env github에 업로드되어 있다면 제거 -->
 
 <!-- 해야할것
