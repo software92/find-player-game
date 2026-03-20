@@ -6,18 +6,17 @@
     "lib": ["es2020"],
     "sourceMap": true,
     "outDir": "lib",
-    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    // "rootDir": "src",
+    "preserveSymlinks": true, // 심볼릭 링크 경로를 실제 경로로 치환하지 않고 유지
     "baseUrl": "./src",
-    // "paths": {
-    //   "*": ["./*"]
-    // }
     "paths": {
-      "*": ["./*"], // 이게 핵심! 모든 경로(*)를 baseUrl(src)에서 찾아라
-      "@/*": ["./*"] // @/ 를 쓰고 싶을 때를 대비
+      "*": ["*"], // 이게 핵심! 모든 경로(*)를 baseUrl(src)에서 찾아라
+      "@/*": ["*"], // @/ 를 쓰고 싶을 때를 대비
+      "shared/*": ["./shared/*"]
       // "shared/*": ["./shared/*"]
     }
   },

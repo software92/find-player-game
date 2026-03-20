@@ -39,6 +39,11 @@ jobs:
           npm ci
           # cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
 
+      - name: Create symbolic link for shared
+        run: |
+          cd functions/src
+          ln -s ../../shared shared  # 상대 경로를 이용해 링크 생성
+
       - name: Build project
         run: |
           npm run build
