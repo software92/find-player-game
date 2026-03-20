@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchPlayersDataInLeague } from '../services/clientService'
-import { DEFAULT_API_PARAMS } from '@/constant'
-import type { IFirebasePlayer } from '../types'
+import { fetchPlayersDataInLeague } from '@/services/clientService'
 import { REACT_QUERY_OPTIONS } from '@/api'
+import { DEFAULT_API_PARAMS } from 'shared/params'
+import type { IFirebasePlayer } from 'shared/api.types'
 
 const queryKeys = (leagueId: number) => [leagueId, 'league', 'players'] as const
 

@@ -1,7 +1,7 @@
 import { REACT_QUERY_OPTIONS } from '@/api'
-import { DEFAULT_API_PARAMS } from '@/constant'
 import { queryClient } from '@/queryClient'
 import { fetchPlayersDataInLeague } from '@/services/clientService'
+import { DEFAULT_API_PARAMS } from 'shared/params'
 
 const coverLoader = async () => {
   const queryKey = ['players', 'all']
