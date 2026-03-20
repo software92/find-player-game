@@ -29,7 +29,7 @@ export const syncData = async (): Promise<void> => {
     const playerIdsInLeague: number[] = []
 
     // temp
-    const tableData = leagueTableData.slice(0, 4)
+    const tableData = leagueTableData.slice(0, 1)
     // for (const { team } of leagueTableData) {
     for (const { team } of tableData) {
       try {
