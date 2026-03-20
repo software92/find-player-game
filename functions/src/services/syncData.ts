@@ -6,7 +6,7 @@ import { sleep } from '@/utils/timer'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { fetchErrorLogger } from 'shared/api'
 import { IFirebasePlayer } from 'shared/api.types'
-import { DEFAULT_API_PARAMS } from 'shared/params'
+import { DEFAULT_API_PARAMS } from '@/shared/params'
 import { database } from '@/firebase'
 import { ITeam1 } from '@/types/api-external.types'
 
