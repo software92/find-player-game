@@ -1,12 +1,12 @@
-import { footballApiInstance } from '@/api/externalClient'
-import { FOOTBAL_API_ENDPOINT } from '@/constant/footballRoutes'
-import { fetchErrorLogger } from '@/shared/api'
+import { footballApiInstance } from 'api/externalClient'
+import { FOOTBAL_API_ENDPOINT } from 'constant/footballRoutes'
+import { fetchErrorLogger } from 'shared/api'
 import type {
   IGetLeagueTable,
   IGetTeamSquads,
   IGetTeamSquadsResponse,
   IResponse,
-} from '@/types/api-external.types'
+} from 'types/api-external.types'
 
 // external api -> firebase
 
