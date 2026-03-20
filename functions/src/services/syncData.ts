@@ -6,10 +6,11 @@ import { ref, serverTimestamp, update } from 'firebase/database'
 import { sleep } from '@/utils/timer'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { fetchErrorLogger } from 'shared/api'
-import { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from 'shared/api.types'
 import { DEFAULT_API_PARAMS } from '@/shared/params'
+
+import type { ITeam1 } from '@/types/api-external.types'
 import { database } from '@/firebase'
-import { ITeam1 } from '@/types/api-external.types'
 
 type IFirebaseObject = Record<string, any>
 
