@@ -7,10 +7,11 @@ import { DEFAULT_API_PARAMS } from 'shared/params'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { sleep } from 'utils/timer'
 import { ref, serverTimestamp, update } from 'firebase/database'
-import { database } from 'firebase'
+
+import { database } from 'firebase/config'
 import { fetchErrorLogger } from 'shared/api'
-import { ITeam1 } from 'types/api-external.types'
-import { IFirebasePlayer } from 'shared/api.types'
+import type { ITeam1 } from 'types/api-external.types'
+import type { IFirebasePlayer } from 'shared/api.types'
 
 type IFirebaseObject = Record<string, any>
 
