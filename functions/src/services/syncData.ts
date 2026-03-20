@@ -5,13 +5,13 @@
 
 import { sleep } from '../utils/timer'
 import { database } from '../firebase/config'
-import { ITeam1 } from '../types/api-external.types'
+import type { ITeam1 } from '../types/api-external.types'
 
 import { DEFAULT_API_PARAMS } from 'shared/params'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
 import { ref, serverTimestamp, update } from 'firebase/database'
 import { fetchErrorLogger } from 'shared/api'
-import { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from 'shared/api.types'
 
 // import { DEFAULT_API_PARAMS } from '@/shared/params'
 // import { fetchLeagueTableData, fetchSquadData } from './externalService'
