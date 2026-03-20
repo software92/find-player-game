@@ -11,11 +11,11 @@
     "target": "es2017",
     "skipLibCheck": true,
     "rootDir": "src",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./*"],
       // "shared/*": ["../shared/*"]
-      "shared/*": ["src/shared/*"]
+      "shared/*": ["./shared/*"]
     }
   },
   "compileOnSave": true,
