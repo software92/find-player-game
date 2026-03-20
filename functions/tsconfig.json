@@ -11,12 +11,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["./*"], // 이게 핵심! 모든 경로(*)를 baseUrl(src)에서 찾아라
-      "@/*": ["./*"], // @/ 를 쓰고 싶을 때를 대비
-      "shared/*": ["./shared/*"]
-    }
+    "baseUrl": "./src"
+    // "paths": {
+    //   "*": ["./*"], // 이게 핵심! 모든 경로(*)를 baseUrl(src)에서 찾아라
+    //   "@/*": ["./*"], // @/ 를 쓰고 싶을 때를 대비
+    //   "shared/*": ["./shared/*"]
+    // }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "lib"]
