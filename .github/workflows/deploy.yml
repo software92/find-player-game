@@ -37,13 +37,13 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
+          # cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
 
       - name: Build project
         run: |
           npm run build
           # functions 빌드 (경로 에러가 나도 중단되지 않게 처리하려면 || true 사용)
-          cd functions && (npm run build || true)
+          # cd functions && (npm run build || true)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
