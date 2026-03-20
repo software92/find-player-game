@@ -4,7 +4,7 @@ import { getDatabase } from 'firebase/database'
 
 // Replace these values with your Firebase project configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: process.env.FUNCTION_FIREBASE_API_KEY,
   authDomain: 'real-time-db--find-player.firebaseapp.com',
   databaseURL: 'https://real-time-db--find-player-default-rtdb.firebaseio.com',
   projectId: 'real-time-db--find-player',

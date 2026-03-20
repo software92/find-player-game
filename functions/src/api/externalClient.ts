@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 // TODO: 환경 변수 처리
-const FOOTBALL_API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY
+const FOOTBALL_API_KEY = process.env.FUNCTION_FOOTBALL_API_KEY
 const FOOTBALL_BASE_API_URL = 'https://v3.football.api-sports.io'
 
 export const footballApiInstance = axios.create({
