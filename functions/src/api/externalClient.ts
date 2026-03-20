@@ -1,0 +1,14 @@
+// football axios 인스턴스
+import axios from 'axios'
+
+// TODO: 환경 변수 처리
+const FOOTBALL_API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY
+const FOOTBALL_BASE_API_URL = 'https://v3.football.api-sports.io'
+
+export const footballApiInstance = axios.create({
+  baseURL: FOOTBALL_BASE_API_URL,
+  headers: {
+    'x-apisports-key': FOOTBALL_API_KEY,
+    accept: 'application/json`',
+  },
+})

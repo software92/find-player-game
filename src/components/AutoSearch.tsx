@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
-import type { IFirebasePlayer } from '../types'
 import { useEffect, useRef } from 'react'
+import type { IFirebasePlayer } from 'shared/api.types'
 
 const AutoSearchBox = styled.ul`
   width: 70%;

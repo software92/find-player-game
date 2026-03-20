@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { useEffect, useMemo, useState } from 'react'
+import { useRecoilState } from 'recoil'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import AutoSearch from './AutoSearch'
-import type { IFirebasePlayer, IHint } from '@/types'
-import { useRecoilState } from 'recoil'
 import { inputState } from '@/atoms/quizState'
+import type { IHint } from '@/types'
+import type { IFirebasePlayer } from 'shared/api.types'
 
 interface IForm {
   quiz: IFirebasePlayer

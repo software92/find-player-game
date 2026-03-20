@@ -1,5 +1,6 @@
+import type { IHint } from '@/types'
+import { Position } from 'shared/api.types'
 import styled from 'styled-components'
-import { Position, type IFirebasePlayer } from '../types'
 
 const HintList = styled.ul`
   margin-bottom: 40px;
@@ -57,7 +58,7 @@ const ClubEmblem = styled.img`
 `
 
 interface IHintBoxProps {
-  hintArr: { q: IFirebasePlayer; a: IFirebasePlayer }[]
+  hintArr: IHint[]
 }
 
 const HintBox = ({ hintArr }: IHintBoxProps) => {
