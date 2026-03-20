@@ -3,14 +3,15 @@
 // [test - const tableData = leagueTableData.slice(0, 2)]
 // api-football -> firebase data 연결
 
+import { sleep } from '../utils/timer'
+import { database } from '../firebase/config'
+import { ITeam1 } from '../types/api-external.types'
+
 import { DEFAULT_API_PARAMS } from 'shared/params'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
-import { sleep } from 'utils/timer'
 import { ref, serverTimestamp, update } from 'firebase/database'
-import { database } from 'firebase/config'
 import { fetchErrorLogger } from 'shared/api'
-import type { ITeam1 } from 'types/api-external.types'
-import type { IFirebasePlayer } from 'shared/api.types'
+import { IFirebasePlayer } from 'shared/api.types'
 
 // import { DEFAULT_API_PARAMS } from '@/shared/params'
 // import { fetchLeagueTableData, fetchSquadData } from './externalService'
