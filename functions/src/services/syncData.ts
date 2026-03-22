@@ -1,31 +1,23 @@
+// cloud function 서버에서는 LocalStorage가 없기 때문에 제거
 // TODO: cloud functions 사용 예정
 // [test - const tableData = leagueTableData.slice(0, 2)]
 // api-football -> firebase data 연결
-import { ref, serverTimestamp, update } from 'firebase/database'
-import { sleep } from '@/utils/timer'
+
+import { sleep } from '../utils/timer'
+import { database } from '../firebase/config'
+import type { ITeam1 } from '../types/api-external.types'
+
+import { DEFAULT_API_PARAMS } from '../shared/params'
 import { fetchLeagueTableData, fetchSquadData } from './externalService'
-import { fetchErrorLogger } from 'shared/api'
-import { IFirebasePlayer } from 'shared/api.types'
-import { DEFAULT_API_PARAMS } from '@/shared/params'
-import { database } from '@/firebase'
-import { ITeam1 } from '@/types/api-external.types'
+import { ref, serverTimestamp, update } from 'firebase/database'
+import { fetchErrorLogger } from '../shared/api'
+import type { IFirebasePlayer } from '../shared/api.types'
 
 type IFirebaseObject = Record<string, any>
-
-// temp keys
-const LS_KEY = 'last_update'
 
 // TODO: leagueTableData를 사용해서 promise를 호출할 때 slice 제거
 // TODO: server를 기준으로 업데이트 시기 추후 설정(if문 및 관련 코드 제거)
 export const syncData = async (): Promise<void> => {
-  const now = getNowYearNMonth()
-  const lastUpdate = localStorage.getItem(LS_KEY)
-
-  if (lastUpdate == now) {
-    console.log('최신 데이터입니다. firebase를 동기화하지 않습니다.')
-    return
-  }
-
   console.log('Firebase의 데이터 동기화 작업을 시작합니다')
 
   try {
@@ -38,13 +30,17 @@ export const syncData = async (): Promise<void> => {
     const playerIdsInLeague: number[] = []
 
     // temp
-    const tableData = leagueTableData.slice(0, 4)
+    const tableData = leagueTableData.slice(0, 1)
     // for (const { team } of leagueTableData) {
     for (const { team } of tableData) {
-      const playerIdsInTeam = await syncTeam(team, updates)
-      playerIdsInLeague.push(...playerIdsInTeam)
+      try {
+        const playerIdsInTeam = await syncTeam(team, updates)
+        playerIdsInLeague.push(...playerIdsInTeam)
 
-      console.log(`${team.name} 동기화 완료`)
+        console.log(`${team.name} 데이터 동기화 완료`)
+      } catch (error) {
+        console.log(`${team.name} 데이터 동기화 실패`)
+      }
       await sleep(8000)
     }
 
@@ -61,20 +57,12 @@ export const syncData = async (): Promise<void> => {
 
     await update(ref(database), dataToStore)
 
-    localStorage.setItem(LS_KEY, now)
     console.log(
       'Football API 데이터를 Firebase 데이터베이스에 업데이트 했습니다.',
     )
   } catch (error) {
     fetchErrorLogger(error)
   }
-}
-
-const getNowYearNMonth = (): string => {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}`
 }
 
 const syncTeam = async (

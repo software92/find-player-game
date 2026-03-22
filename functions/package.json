@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc",
     "build:watch": "tsc --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "24"
+    "node": "22"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -18,8 +18,8 @@
     "firebase-functions": "^7.0.0"
   },
   "devDependencies": {
+    "axios": "^1.13.6",
     "firebase-functions-test": "^3.4.1",
-    "tsc-alias": "^1.8.16",
     "typescript": "^5.7.3"
   },
   "private": true
