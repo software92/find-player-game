@@ -1,15 +1,18 @@
 import axios from 'axios'
 
-export const fetchErrorLogger = (error: unknown) => {
-  let message = '데이터를 가져오는 중 오류가 발생했습니다.'
+export const fetchErrorLogger = (error: unknown, context?: string) => {
+  let message = '알 수 없는 오류가 발생했습니다.'
+  const prefix = context ? `[${context}] ` : ''
 
   if (axios.isAxiosError(error)) {
-    message = error.response?.data?.message || error.message
-    console.error('❌ API Request Error:', message)
+    const apiMessage = error.response?.data?.message || error.message
+    const status = error.response?.status || 'No Status'
+    message = `API Error (${status}): ${apiMessage}`
   } else if (error instanceof Error) {
     message = error.message
-    console.error('❌ System Error:', message)
-  } else {
-    console.error('❌ Unknown Error:', error)
+
+    console.error(`${prefix}❌ Stack:`, error.stack)
   }
+
+  console.error(`${prefix}❌ 최종 에러 메시지:`, message)
 }
