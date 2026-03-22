@@ -9,6 +9,6 @@ export const footballApiInstance = axios.create({
   baseURL: FOOTBALL_BASE_API_URL,
   headers: {
     'x-apisports-key': FOOTBALL_API_KEY,
-    accept: 'application/json`',
+    accept: 'application/json',
   },
 })
