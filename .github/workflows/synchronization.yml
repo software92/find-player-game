@@ -1,4 +1,4 @@
-name: Firebase Cron Job
+name: Firebase synchronization
 on:
   # schedule:
   # 60분마다 실행 (UTC 기준, test)
