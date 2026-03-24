@@ -1,3 +1,5 @@
+import type { IPlayer } from '../shared/api.types'
+
 // request: teams in league
 export interface IGetLeagueTable {
   get: string
@@ -52,24 +54,7 @@ export interface ITeam2 {
   logo: string
 }
 
-export interface IPlayer {
-  id: number
-  name: string
-  age: number
-  number: number
-  photo: string
-  position: keyof typeof Position
-}
-
-// commons
 export interface IPaging {
   current: number
   total: number
-}
-
-export enum Position {
-  'Goalkeeper' = 'GK',
-  'Defender' = 'DF',
-  'Midfielder' = 'MD',
-  'Attacker' = 'FW',
 }

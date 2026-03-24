@@ -10,8 +10,9 @@ import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLea
 import SearchForm from '@/components/SearchForm'
 import { inputState, quizState } from '@/atoms/quizState'
 import { Helmet } from 'react-helmet-async'
-import { DEFAULT_API_PARAMS } from '@/constant'
+
 import useQuizGenerator from '@/hooks/useQuizGenerator'
+import { DEFAULT_API_PARAMS } from 'shared/params'
 
 const Container = styled.div`
   position: relative;
@@ -159,10 +160,10 @@ const Submission = () => {
       <Container>
         <FormContainer>
           <Photo
-            key={quiz?.photo || null}
+            key={quiz?.photo}
             draggable={false}
-            src={quiz?.photo || null}
-            alt={`${quiz.name}`}
+            src={quiz?.photo}
+            alt={`${quiz?.name}`}
             $isCorrect={isCorrect}
           />
           <SearchForm

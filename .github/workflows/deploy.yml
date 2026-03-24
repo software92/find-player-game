@@ -4,6 +4,10 @@ on:
   push:
     # deploy -> master (배포 브랜치 변경)
     branches: [master]
+    # 테스트 브랜치
+    # branches: [feat/migrate-to-functions]
+  pull_request:
+    branches: [master]
 
 permissions:
   contents: read
@@ -33,10 +37,15 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
 
       - name: Build project
-        run: npm run build
+        run: |
+          npm run build
+          # functions 빌드 (경로 에러가 나도 중단되지 않게 처리하려면 || true 사용)
+          # cd functions && (npm run build || true)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -45,6 +54,8 @@ jobs:
 
   deploy:
     needs: build
+    # 오직 master 브랜치에 push(merge 포함)되었을 때만 실제 배포 수행
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

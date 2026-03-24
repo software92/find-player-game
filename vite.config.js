@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   base: '/find-player-game',
   resolve: {
-    alias: { '@': path.resolve(__dirname, './src') },
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      shared: path.resolve(__dirname, './shared'),
+    },
   },
 })

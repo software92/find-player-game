@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import Club from './Club'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 import { keyframes } from 'styled-components'
-import { DEFAULT_API_PARAMS } from '@/constant'
+import { DEFAULT_API_PARAMS } from 'shared/params'
 
 // 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
 const shimmer = keyframes`

@@ -2,7 +2,7 @@ import useFetchingPlayersDataInLeague from './useFetchingPlayersDataInLeague'
 import { useRecoilState } from 'recoil'
 import { quizState } from '@/atoms/quizState'
 import { useCallback } from 'react'
-import { DEFAULT_API_PARAMS } from '@/constant'
+import { DEFAULT_API_PARAMS } from 'shared/params'
 
 const useQuizGenerator = () => {
   const [prevQuiz, setQuiz] = useRecoilState(quizState)

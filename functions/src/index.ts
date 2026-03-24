@@ -1,36 +1,112 @@
-import { onRequest } from 'firebase-functions/https'
+import { HttpsOptions, onRequest } from 'firebase-functions/https'
+import { syncData } from './services/syncData'
 
-// 10분마다 서버에 로그를 출력하는 테스트 함수
-export const scheduledSync = onRequest((_, res) => {
-  console.log('데이터 동기화 작업을 시작합니다')
+// 공통 옵션 (필요시 개별 함수에서 덮어쓰기 가능)
+const defaultOptions: HttpsOptions = {
+  region: 'us-central1',
+  timeoutSeconds: 300, // 루프 처리를 위해 넉넉히 설정
+  memory: '512MiB',
+  invoker: 'public',
+}
 
-  res.status(200).send('데이터를 동기화 완료합니다')
-})
+// 고차 함수 정의
+// const createAuthorizedFunction = (
+//   fn: () => Promise<void>,
+//   options: HttpsOptions = defaultOptions,
+// ) => {
+//   return onRequest(options, async (req, res) => {
+//     console.log(`[${req.path}] 작업 시작`)
 
-// // firebase 요청시 보안 설정
-// const functions = require("firebase-functions");
+//     const FOOTBALL_KEY = process.env.FUNCTION_FOOTBALL_API_KEY
+//     const FIREBASE_KEY = process.env.FUNCTION_FIREBASE_API_KEY
+//     const clientToken = req.headers['authorization']
+//     const serverToken = `Bearer ${FOOTBALL_KEY}${FIREBASE_KEY}`
 
-// exports.myScheduledTask = functions.https.onRequest((req, res) => {
-//   // 1. 헤더에서 'authorization' 값을 가져옵니다.
-//   const clientToken = req.headers['authorization'];
+//     // 1. 인증 체크
+//     if (!clientToken || clientToken !== serverToken) {
+//       console.error('인증 실패')
+//       res.status(403).send('Unauthorized')
+//       return
+//     }
 
-//   // 2. 미리 설정한 비밀 키 (환경 변수 등에 저장 권장)
-//   const serverToken = "Bearer MY_SECRET_CRON_TOKEN";
+//     try {
+//       await fn()
 
-//   // 3. 토큰이 없거나 일치하지 않으면 403(Forbidden) 반환
-//   if (!clientToken || clientToken !== serverToken) {
-//     console.error("Unauthorized attempt to run cron job.");
-//     return res.status(403).send("Unauthorized: Invalid API Key");
-//   }
+//       res.status(200).send('OK')
+//     } catch (error) {
+//       const message = error instanceof Error ? error.message : 'Unknown Error'
+//       console.error('에러 발생:', message)
+//       if (!res.headersSent) {
+//         res.status(500).send(message)
+//       }
+//     }
+//   })
+// }
 
-//   // 4. 검증 통과 후 실제 로직 실행
-//   try {
-//     console.log("Cron job logic starting...");
-//     // ... 실제 작업 수행 ...
-//     res.status(200).send("Cron Job Successfully Executed");
-//   } catch (error) {
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+// 10개 데이터 처리 가능한지 확인
 
-// https://scheduledsync-ntic65va6q-uc.a.run.app
+// // Football api 데이터를 Firebase에 동기화 시켜주는 함수
+// export const syncFootballDataToFirebase = onRequest(
+//   {
+//     invoker: 'public',
+//     memory: '512MiB',
+//     timeoutSeconds: 300,
+//     region: 'us-central1',
+//   },
+//   async (req, res) => {
+//     console.log('데이터 동기화 작업을 시작합니다')
+//     const FOOTBALL_KEY = process.env.FUNCTION_FOOTBALL_API_KEY
+//     const FIREBASE_KEY = process.env.FUNCTION_FIREBASE_API_KEY
+
+//     const clientToken = req.headers['authorization']
+//     const serverToken = `Bearer ${FOOTBALL_KEY}${FIREBASE_KEY}`
+
+//     if (!clientToken || clientToken !== serverToken) {
+//       console.error('인증이 필요한 요청입니다.')
+//       res.status(403).send('Unauthorized: Invalid API Key')
+//       return
+//     }
+
+//     try {
+//       await syncData()
+//       res.status(200).send('데이터를 동기화 완료했습니다')
+//     } catch (error) {
+//       const message =
+//         error instanceof Error ? error.message : '서버에 오류가 발생했습니다.'
+
+//       console.log(message)
+
+//       res.status(500).send(message)
+//     }
+//   },
+// )
+
+// Football api 데이터를 Firebase에 동기화 시켜주는 함수
+export const syncFootballToFirebase = onRequest(
+  defaultOptions,
+  async (req, res) => {
+    const FOOTBALL_KEY = process.env.FUNCTION_FOOTBALL_API_KEY
+    const FIREBASE_KEY = process.env.FUNCTION_FIREBASE_API_KEY
+
+    const clientToken = req.headers['authorization']
+    const serverToken = `Bearer ${FOOTBALL_KEY}${FIREBASE_KEY}`
+
+    if (!clientToken || clientToken !== serverToken) {
+      console.error('인증이 필요한 요청입니다.')
+      res.status(403).send('Unauthorized: Invalid API Key')
+      return
+    }
+
+    try {
+      await syncData()
+      res.status(200).send('데이터를 동기화 완료했습니다')
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : '서버에 오류가 발생했습니다.'
+
+      console.error(message)
+
+      res.status(500).send(message)
+    }
+  },
+)

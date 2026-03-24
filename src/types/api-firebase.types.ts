@@ -1,10 +1,5 @@
-import type { IPlayer } from './api-external.types'
+import type { IFirebasePlayer } from 'shared/api.types'
 
-export interface IFirebasePlayer extends IPlayer {
-  teamId: number
-  teamLogo: string
-  leagueId: number
-}
 export interface IFirebaseTeamDetail {
   id: number
   name: string

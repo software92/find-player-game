@@ -1,3 +1,2 @@
 export * from './firebaseRoutes'
-export * from './footballRoutes'
-export * from './firebase'
+export * from './routerPath'

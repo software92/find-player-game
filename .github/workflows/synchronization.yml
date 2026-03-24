@@ -1,8 +1,8 @@
-name: Firebase Cron Job
+name: Firebase synchronization
 on:
-  schedule:
-    # 60분마다 실행 (UTC 기준, test)
-    - cron: '0 * * * *'
+  # schedule:
+  # 60분마다 실행 (UTC 기준, test)
+  # - cron: '0 * * * *'
   # 테스트를 위해 수동 실행 버튼 활성화
   workflow_dispatch:
 
@@ -10,8 +10,9 @@ jobs:
   call_firebase:
     runs-on: ubuntu-latest
     steps:
-      - name: Hit Firebase Function
+      - name: Firebase 데이터 동기화
         run: |
-          curl -X GET "https://scheduledsync-ntic65va6q-uc.a.run.app" \
+          # url 변경
+          curl -X GET "https://syncfootballtofirebase-ntic65va6q-uc.a.run.app" \
           -H "Authorization: Bearer ${{ secrets.VITE_FOOTBALL_API_KEY }}${{ secrets.VITE_FIREBASE_API_KEY }}" \
           -v
