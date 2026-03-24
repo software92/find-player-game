@@ -8,9 +8,6 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from './styles/theme'
 import { queryClient } from './queryClient'
 
-// import { syncFirebase } from './services/syncService'
-// syncFirebase()
-
 createRoot(document.getElementById('root') as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>

@@ -1,18 +1,9 @@
-// Import Firebase modules
-import { initializeApp } from 'firebase/app'
-import { getDatabase } from 'firebase/database'
+import { initializeApp, getApps } from 'firebase-admin/app'
+import { getDatabase } from 'firebase-admin/database'
 
-// Replace these values with your Firebase project configuration
-const firebaseConfig = {
-  apiKey: process.env.FUNCTION_FIREBASE_API_KEY,
-  authDomain: 'real-time-db--find-player.firebaseapp.com',
-  databaseURL: 'https://real-time-db--find-player-default-rtdb.firebaseio.com',
-  projectId: 'real-time-db--find-player',
-  storageBucket: 'real-time-db--find-player.firebasestorage.app',
-  messagingSenderId: '193465948749',
-  appId: '1:193465948749:web:9e6868f1ba03a50b225a04',
+// 이미 초기화되었는지 확인 (중복 초기화 방지)
+if (!getApps().length) {
+  initializeApp() // Cloud Functions 환경에서는 인자 없이 호출하면 자동 설정됨
 }
 
-// Initialize Firebase with your configuration
-export const app = initializeApp(firebaseConfig)
-export const database = getDatabase(app)
+export const adminDb = getDatabase()

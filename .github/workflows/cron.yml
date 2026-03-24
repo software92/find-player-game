@@ -10,9 +10,9 @@ jobs:
   call_firebase:
     runs-on: ubuntu-latest
     steps:
-      - name: Hit Firebase Function
+      - name: Firebase 데이터 동기화
         run: |
           # url 변경
-          curl -X GET "https://syncfootballdatatofirebase-ntic65va6q-uc.a.run.app" \
+          curl -X GET "https://syncfootballtofirebase-ntic65va6q-uc.a.run.app" \
           -H "Authorization: Bearer ${{ secrets.VITE_FOOTBALL_API_KEY }}${{ secrets.VITE_FIREBASE_API_KEY }}" \
           -v

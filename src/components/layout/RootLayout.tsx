@@ -4,7 +4,6 @@ import ClubViews from '../ClubViews'
 import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { GlobalStyle } from '@/styles/GlobalStyle'
-// import { syncFirebase } from '@/services/syncService'
 
 const Container = styled.div`
   display: flex;
@@ -19,12 +18,6 @@ const Container = styled.div`
 `
 
 function RootLayout() {
-  console.log(
-    'import.meta.env.VITE_FIREBASE_API_KEY',
-    import.meta.env.VITE_FIREBASE_API_KEY,
-  )
-
-  // syncFirebase()
   return (
     <>
       <Helmet>

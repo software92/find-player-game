@@ -7,10 +7,27 @@ import type {
   IGetTeamSquadsResponse,
   IResponse,
 } from '../types/api-external.types'
+import { sleep } from '../utils/timer'
 
-// external api -> firebase
+// fetchSquadData 요청 실패시 1회 재요청
+export const fetchSquadDataWithRetry = async (
+  teamId: number,
+  retries = 2,
+): Promise<IGetTeamSquadsResponse> => {
+  try {
+    return await fetchSquadData(teamId)
+  } catch (error: unknown) {
+    if (retries > 0) {
+      console.log(
+        `⚠️ Rate Limit 감지됨. 65초 대기 후 재시도합니다... (남은 횟수: ${retries})`,
+      )
+      await sleep(65000) // 1분 윈도우가 완전히 초기화되도록 넉넉히 대기
+      return fetchSquadDataWithRetry(teamId, retries - 1)
+    }
+    throw error
+  }
+}
 
-// API 요청 분리(football api)
 // 팀의 선수 정보 가져오기
 export const fetchSquadData = async (
   teamId: number,
@@ -27,7 +44,7 @@ export const fetchSquadData = async (
 
     return response.data.response[0]
   } catch (error) {
-    fetchErrorLogger(error)
+    fetchErrorLogger(error, 'externalService - fetchSquadData')
     throw error
   }
 }
@@ -43,6 +60,9 @@ export const fetchLeagueTableData = async ({
   season,
 }: IFetchLeague): Promise<IResponse[]> => {
   try {
+    // const url = `${FOOTBAL_API_ENDPOINT.LEAGUE_TABLE}?league=${league}&season=${season}`
+    // const response = await footballApiInstance.get(url)
+
     const response = await footballApiInstance.get<IGetLeagueTable>(
       FOOTBAL_API_ENDPOINT.LEAGUE_TABLE,
       {
@@ -53,9 +73,10 @@ export const fetchLeagueTableData = async ({
     if (!response.data?.response?.length)
       throw new Error('리그 테이블을 가져오지 못했습니다.')
 
-    return response.data.response
+    return response.data?.response
   } catch (error) {
-    fetchErrorLogger(error)
-    throw error
+    return []
+    // fetchErrorLogger(error,'externalService - fetchLeagueTableData')
+    // throw error
   }
 }
