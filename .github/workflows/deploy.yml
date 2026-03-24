@@ -41,6 +41,12 @@ jobs:
           npm ci
           cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
 
+      - name: Sync shared directory to functions
+        run: |
+          # 기존 링크 삭제
+          rm -rf functions/shared
+          # 실제 폴더 복사
+          cp -r shared functions/shared
       - name: Build project
         run: |
           npm run build

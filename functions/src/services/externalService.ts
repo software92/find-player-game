@@ -60,9 +60,6 @@ export const fetchLeagueTableData = async ({
   season,
 }: IFetchLeague): Promise<IResponse[]> => {
   try {
-    // const url = `${FOOTBAL_API_ENDPOINT.LEAGUE_TABLE}?league=${league}&season=${season}`
-    // const response = await footballApiInstance.get(url)
-
     const response = await footballApiInstance.get<IGetLeagueTable>(
       FOOTBAL_API_ENDPOINT.LEAGUE_TABLE,
       {
@@ -75,8 +72,7 @@ export const fetchLeagueTableData = async ({
 
     return response.data?.response
   } catch (error) {
+    fetchErrorLogger(error, 'externalService - fetchLeagueTableData')
     return []
-    // fetchErrorLogger(error,'externalService - fetchLeagueTableData')
-    // throw error
   }
 }
