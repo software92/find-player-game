@@ -1,4 +1,5 @@
-import { HttpsOptions, onRequest } from 'firebase-functions/https'
+import { onRequest } from 'firebase-functions/https'
+import type { HttpsOptions } from 'firebase-functions/https'
 import { syncData } from './services/syncData'
 
 // 공통 옵션 (필요시 개별 함수에서 덮어쓰기 가능)
