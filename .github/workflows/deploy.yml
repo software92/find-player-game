@@ -34,17 +34,22 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies & Sync Shared
         run: |
+          # 1. 루트 의존성 설치
           npm ci
-          cd functions && npm install  # functions 폴더 내부 의존성 설치 필수!
 
-      - name: Sync shared directory to functions
-        run: |
-          # 기존 링크 삭제
-          rm -rf functions/shared
-          # 실제 폴더 복사
-          cp -r shared functions/shared
+          # 2. shared 폴더를 functions/src 내부로 물리적 복사 (상대 경로 해결)
+          # 에러 로그의 '../shared' 참조를 위해 src 하위에 둡니다.
+          rm -rf functions/src/shared
+          cp -r shared functions/src/shared
+
+          # 디버깅: 복사된 경로 확인
+          ls -R functions/src/shared
+
+          # 3. functions 의존성 설치
+          cd functions && npm install
+
       - name: Build project
         run: |
           npm run build
