@@ -6,8 +6,6 @@ on:
     branches: [master]
     # 테스트 브랜치
     # branches: [feat/migrate-to-functions]
-  pull_request:
-    branches: [master]
 
 permissions:
   contents: read
