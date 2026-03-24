@@ -4,8 +4,6 @@ import { REACT_QUERY_OPTIONS } from '@/api'
 import { DEFAULT_API_PARAMS } from 'shared/params'
 import type { IFirebasePlayer } from 'shared/api.types'
 
-const queryKeys = (leagueId: number) => [leagueId, 'league', 'players'] as const
-
 const useFetchingPlayersDataInLeague = (
   leagueId: number,
   options?: {
@@ -13,12 +11,13 @@ const useFetchingPlayersDataInLeague = (
     enabled?: boolean
   },
 ) => {
+  const queryKeys = [leagueId, 'league', 'players'] as const
   const {
     isPending,
     error,
     data: playersInLeague,
   } = useQuery<IFirebasePlayer[], Error>({
-    queryKey: queryKeys(leagueId),
+    queryKey: queryKeys,
     queryFn: () => fetchPlayersDataInLeague(DEFAULT_API_PARAMS.league),
     initialData: options?.initialData,
     enabled: options?.enabled,
