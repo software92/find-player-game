@@ -4,9 +4,9 @@
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://software92.github.io/find-player-game/)
 ![Deploy Status](https://img.shields.io/github/actions/workflow/status/software92/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
 
-축구 선수의 실루엣과 힌트를 보고 이름을 맞추는 인터랙티브 퀴즈 웹 어플리케이션입니다. 랜덤하게 생성되는 선수 데이터를 바탕으로 사용자가 이름을 검색하고 정답을 맞추는 과정을 담고 있습니다. 데이터 로딩 최적화와 상태 유지에 중점을 두고 개발했습니다.
+기존의 서비스를 유지하며 개발 생산성과 런타임 안정성을 높이기 위해 마이그레이션을 진행했습니다.(JS, CRA -> TS, Vite)
 
----
+축구 선수의 실루엣과 힌트를 보고 이름을 맞추는 인터랙티브 퀴즈 웹 어플리케이션입니다. 랜덤하게 생성되는 선수 데이터를 바탕으로 사용자가 이름을 검색하고 정답을 맞추는 과정을 담고 있습니다. 데이터 로딩 최적화와 상태 유지에 중점을 두고 개발했습니다.
 
 ## 📌 Overview
 
@@ -60,6 +60,15 @@ src/
 - screen 크기에 따라 레이아웃 최적화
 - 환경 변수를 사용한 API KEY 및 서버 요청 토큰 관리
 - GitHub Actions CI/CD 자동 배포
+
+### 🚀 Migration: JS (CRA) to TS (Vite)
+
+기존의 서비스를 유지하며 개발 생산성과 런타임 안정성을 높이기 위해 마이그레이션을 진행했습니다.
+
+| 항목       | 기존          | 변경       | 이유                                                            |
+| ---------- | ------------- | ---------- | --------------------------------------------------------------- |
+| Build Tool | Webapack(CRA) | Vite       | legacy한 빌드 툴 사용을 중단하고, 개발 속도 80% 향상            |
+| Language   | Javascript    | Typescript | 정적 타입 체크를 통한 런타임 에러 사전 방지 및 코드 편의성 향상 |
 
 ### ✅ Firebase Serverless
 
