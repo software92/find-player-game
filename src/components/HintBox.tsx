@@ -83,7 +83,7 @@ const HintBox = ({ hintArr }: IHintBoxProps) => {
 
           return (
             <HintItem key={a.id}>
-              <MyAnswer>{aName.toUpperCase()}</MyAnswer>
+              <MyAnswer>{aName}</MyAnswer>
               <Row>
                 {[
                   {

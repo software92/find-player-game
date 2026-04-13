@@ -72,8 +72,6 @@ const AutoSearch = ({
     filteredPlayers?.length > 0 && (
       <AutoSearchBox ref={listRef}>
         {filteredPlayers.map((player, idx) => {
-          const name = player.name.toUpperCase()
-
           return (
             <PlayerBox
               key={player.id}
@@ -85,7 +83,7 @@ const AutoSearch = ({
                 src={player.teamLogo || ''}
                 alt={player.teamId.toString()}
               />
-              <Name>{name}</Name>
+              <Name>{player.name}</Name>
             </PlayerBox>
           )
         })}

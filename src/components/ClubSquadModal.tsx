@@ -40,7 +40,6 @@ const PlayerRow = styled.li`
 const Name = styled.span`
   margin: auto 0;
   margin-left: 10px;
-  text-transform: Uppercase;
   font-weight: bold;
   text-shadow: 1px 1px 5px black;
 
@@ -77,7 +76,7 @@ const ClubSquadModal = ({ id, parentRef, offModal }: IClubSquadModalProps) => {
   const listRef = useRef<HTMLUListElement>(null)
 
   const handleClick = (name: string) => {
-    setValue(name.toUpperCase())
+    setValue(name)
     offModal()
   }
 

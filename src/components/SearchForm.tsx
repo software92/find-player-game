@@ -40,20 +40,19 @@ function SearchForm({
   const [value, setValue] = useRecoilState(inputState)
 
   const [focusedIndex, setFocusedIndex] = useState(-1)
+
   const debouncedValue = useDebouncedValue(value, 500)
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.currentTarget.value.toUpperCase())
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.currentTarget.value)
   }
 
-  const filteredPlayerss = useMemo(() => {
+  const filteredPlayerss: IFirebasePlayer[] = useMemo(() => {
     if (disabled) return []
-    if (!squad || debouncedValue.length < 3) return []
+    if (debouncedValue.length < 3) return []
 
-    return squad.filter(player => {
-      const name = player.name.toUpperCase()
-      return name.includes(debouncedValue.trim())
-    })
+    const regex = new RegExp(debouncedValue, 'i')
+    return squad.filter(player => regex.test(player.name))
   }, [squad, debouncedValue, disabled])
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -97,7 +96,6 @@ function SearchForm({
     if (quiz.id === player.id) {
       setIsCorrect(true)
       setFocusedIndex(-1)
-      setValue(player.name.toUpperCase())
     } else {
       setValue('')
     }
@@ -108,26 +106,24 @@ function SearchForm({
   useEffect(() => {
     setValue('')
   }, [])
+
   // 검색어가 바뀌면 포커스 초기화
   useEffect(() => {
     setFocusedIndex(-1)
   }, [debouncedValue])
 
   return (
-    <form method='get' onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       <Input
         disabled={disabled}
         onKeyDown={onKeyDown}
-        type='text'
-        name='player'
-        id='player'
-        placeholder='Write a Full-name'
-        onChange={onChange}
         value={value}
+        onChange={onChange}
+        placeholder='Write a Full-name'
         autoComplete='off'
       />
 
-      {value.length > 2 && debouncedValue.length > 2 && (
+      {debouncedValue.length > 2 && (
         <AutoSearch
           filteredPlayers={filteredPlayerss}
           handleSelect={handleSelect}
