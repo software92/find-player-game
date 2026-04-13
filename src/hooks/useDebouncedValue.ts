@@ -5,7 +5,7 @@ function useDebouncedValue<T>(value: T, ms: number): T {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(value)
+      setDebouncedValue(prev => (Object.is(prev, value) ? prev : value))
     }, ms)
 
     return () => clearTimeout(timer)
